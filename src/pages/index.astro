@@ -10,45 +10,51 @@ import Layout from '../layouts/Layout.astro';
   <div id="a11y-announce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
   <header class="sticky top-0 z-50 bg-gradient-to-r from-[--navy] to-[--navy-mid] border-b border-white/10" x-data="accessibilityTools()" role="banner">
-    <div class="max-w-[900px] mx-auto px-6 flex items-center justify-between h-16">
-      <span class="text-white font-bold text-xl tracking-tight">SCOTS</span>
+    <div class="max-w-[900px] mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
+      <span class="text-white font-bold text-lg sm:text-xl tracking-tight">SCOTS</span>
 
-      <div class="flex items-center gap-2" role="toolbar" aria-label="Accessibility tools">
+      <div class="flex items-center gap-1.5 sm:gap-2" role="toolbar" aria-label="Accessibility tools">
         <button
           @click="toggleReadAloud()"
           :class="reading ? 'bg-red-500' : 'bg-white/10 hover:bg-white/20'"
-          class="px-3 py-2 rounded-lg text-sm font-medium text-white whitespace-nowrap"
+          class="px-2.5 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-white whitespace-nowrap"
           aria-label="Read this page aloud"
           :aria-label="reading ? 'Stop reading' : 'Read this page aloud'"
           :aria-pressed="reading.toString()"
-          x-text="reading ? 'Stop reading' : 'Read this page'"
-        >Read this page</button>
+          x-text="reading ? 'Stop' : 'Read aloud'"
+        >Read aloud</button>
+
+        <span class="w-px h-6 bg-white/20 mx-0.5 sm:mx-1" aria-hidden="true"></span>
 
         <button
           @click="cycleSize()"
-          class="w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-sm"
+          class="flex flex-col items-center justify-center w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white"
           aria-label="Change text size"
-          x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'"
-        ></button>
+        >
+          <span class="font-bold text-sm leading-none" x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'">A</span>
+          <span class="text-[9px] text-white/60 leading-none mt-0.5">Size</span>
+        </button>
 
         <button
           @click="toggleContrast()"
           :class="highContrast ? 'bg-yellow-400 text-black' : 'bg-white/10 hover:bg-white/20 text-white'"
-          class="w-11 h-11 rounded-lg flex items-center justify-center"
+          class="flex flex-col items-center justify-center w-11 h-11 rounded-lg"
           aria-label="Toggle high contrast"
           :aria-pressed="highContrast.toString()"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
+          <span class="text-[9px] opacity-60 leading-none mt-0.5">Contrast</span>
         </button>
 
         <button
           @click="toggleColorBlind()"
           :class="colorBlind ? 'bg-orange-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'"
-          class="w-11 h-11 rounded-lg flex items-center justify-center"
+          class="flex flex-col items-center justify-center w-11 h-11 rounded-lg"
           aria-label="Toggle color blind mode"
           :aria-pressed="colorBlind.toString()"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          <span class="text-[9px] opacity-60 leading-none mt-0.5">Vision</span>
         </button>
       </div>
     </div>
