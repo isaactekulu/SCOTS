@@ -17,7 +17,7 @@ import Layout from '../layouts/Layout.astro';
         <button
           @click="toggleReadAloud()"
           :class="reading ? 'bg-red-500' : 'bg-white/10 hover:bg-white/20'"
-          class="px-2.5 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-white whitespace-nowrap"
+          class="px-2.5 sm:px-3 rounded-lg text-xs sm:text-sm font-medium text-white whitespace-nowrap min-h-[44px] flex items-center"
           aria-label="Read this page aloud"
           :aria-label="reading ? 'Stop reading' : 'Read this page aloud'"
           :aria-pressed="reading.toString()"
@@ -30,6 +30,7 @@ import Layout from '../layouts/Layout.astro';
           @click="cycleSize()"
           class="flex flex-col items-center justify-center w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white"
           aria-label="Change text size"
+          :aria-label="'Change text size, currently ' + textSize"
         >
           <span class="font-bold text-sm leading-none" x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'">A</span>
           <span class="text-[9px] text-white/60 leading-none mt-0.5">Size</span>
@@ -43,7 +44,7 @@ import Layout from '../layouts/Layout.astro';
           :aria-pressed="highContrast.toString()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
-          <span class="text-[9px] opacity-60 leading-none mt-0.5">Contrast</span>
+          <span class="text-[9px] opacity-60 leading-none mt-0.5" x-text="highContrast ? 'On' : 'Contrast'">Contrast</span>
         </button>
 
         <button
@@ -54,7 +55,7 @@ import Layout from '../layouts/Layout.astro';
           :aria-pressed="colorBlind.toString()"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-          <span class="text-[9px] opacity-60 leading-none mt-0.5">Vision</span>
+          <span class="text-[9px] opacity-60 leading-none mt-0.5" x-text="colorBlind ? 'On' : 'Vision'">Vision</span>
         </button>
       </div>
     </div>
@@ -62,7 +63,7 @@ import Layout from '../layouts/Layout.astro';
 
   <main id="main-content">
     <!-- Hero -->
-    <section class="bg-white border-b-2 border-[--border]" aria-labelledby="page-title">
+    <section class="bg-white" aria-labelledby="page-title">
       <div class="max-w-[900px] mx-auto px-6 py-12 md:py-16">
         <h1 id="page-title" class="text-[--navy] mb-4">What to expect from your appointment</h1>
         <p class="text-[--text-muted] text-lg max-w-[640px] leading-relaxed">
@@ -74,7 +75,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="max-w-[900px] mx-auto px-6">
 
       <!-- Referral -->
-      <section id="referral" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="referral-heading">
+      <section id="referral" class="py-12 scroll-mt-40 fade-up" aria-labelledby="referral-heading">
         <h2 id="referral-heading" class="text-[--navy] mb-5">Why have I been referred?</h2>
         <p class="text-[--text-muted]">
           You have been referred to SCOTS to assess your musculoskeletal condition. This means problems with your <strong>joints, muscles, or soft tissues</strong>. We will work out the best next step for your care.
@@ -105,7 +106,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- Surgeon -->
-      <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="surgeon-heading">
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="surgeon-heading">
         <h2 id="surgeon-heading" class="text-[--navy] mb-5">Will I see a surgeon?</h2>
         <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mb-5">
           <p class="text-white text-2xl font-bold mb-0">No, not at this stage.</p>
@@ -121,7 +122,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- Why not surgeon -->
-      <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="why-not-heading">
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="why-not-heading">
         <h2 id="why-not-heading" class="text-[--navy] mb-5">Why not go straight to a surgeon?</h2>
         <p class="text-[--text-muted]">For many conditions:</p>
         <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
@@ -135,7 +136,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- Appointment -->
-      <section id="appointment" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="appointment-heading">
+      <section id="appointment" class="py-12 scroll-mt-40 fade-up" aria-labelledby="appointment-heading">
         <h2 id="appointment-heading" class="text-[--navy] mb-5">What will happen at my appointment?</h2>
         <p class="text-[--text-muted] mb-6">At your appointment, we will:</p>
         <ol class="list-none space-y-4 pl-0 mb-6" role="list">
@@ -162,7 +163,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- Surgery -->
-      <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="surgery-heading">
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="surgery-heading">
         <h2 id="surgery-heading" class="text-[--navy] mb-5">What if I think I need surgery?</h2>
         <p class="text-[--text-muted]">
           We understand you may be hoping for a surgical opinion. During your appointment, we will explain whether surgery is likely to help you.
@@ -176,7 +177,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- Physio -->
-      <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="physio-heading">
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="physio-heading">
         <h2 id="physio-heading" class="text-[--navy] mb-5">What if I have already tried physiotherapy?</h2>
         <p class="text-[--text-muted]">That is helpful information. We will look at:</p>
         <ul class="list-disc pl-7 text-[--text-muted] space-y-2">
@@ -190,7 +191,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- After assessment -->
-      <section id="outcomes" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="outcomes-heading">
+      <section id="outcomes" class="py-12 scroll-mt-40 fade-up" aria-labelledby="outcomes-heading">
         <h2 id="outcomes-heading" class="text-[--navy] mb-5">What happens after the assessment?</h2>
         <p class="text-[--text-muted] mb-5">Depending on your results, we may:</p>
         <ul class="list-none space-y-3 pl-0" role="list">
@@ -204,7 +205,7 @@ import Layout from '../layouts/Layout.astro';
       </section>
 
       <!-- Prepare -->
-      <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="prepare-heading">
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="prepare-heading">
         <h2 id="prepare-heading" class="text-[--navy] mb-5">How to prepare for your appointment</h2>
         <div class="space-y-4">
           <div class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
