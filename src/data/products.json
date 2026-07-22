@@ -1,0 +1,74 @@
+[
+  {
+    "id": "initial-assessment",
+    "name": "Initial Orthopedic Assessment",
+    "description": "Comprehensive musculoskeletal assessment by experienced physiotherapists to determine the most appropriate care pathway for your condition.",
+    "category": "Assessment",
+    "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop",
+    "badge": "Core Service",
+    "featured": true
+  },
+  {
+    "id": "structured-rehab",
+    "name": "Structured Rehabilitation Program",
+    "description": "Targeted, progressive exercise programs designed to improve strength, mobility, and function for musculoskeletal conditions including osteoarthritis.",
+    "category": "Rehabilitation",
+    "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop",
+    "badge": "Popular",
+    "featured": true
+  },
+  {
+    "id": "nutrition-education",
+    "name": "Nutrition & Wellness Education",
+    "description": "Evidence-based education programs covering nutrition, weight management, and lifestyle strategies to support musculoskeletal health.",
+    "category": "Education",
+    "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=600&fit=crop",
+    "badge": "New",
+    "featured": true
+  },
+  {
+    "id": "surgical-consultation",
+    "name": "Surgical Pathway Referral",
+    "description": "For patients who meet the threshold for surgical consideration, we support appropriate referral to orthopaedic specialist teams.",
+    "category": "Consultation",
+    "image": "https://images.unsplash.com/photo-1551190822-a9ce113ac100?w=800&h=600&fit=crop",
+    "badge": "Specialist",
+    "featured": true
+  },
+  {
+    "id": "group-exercise",
+    "name": "Group Exercise Classes",
+    "description": "Supervised group rehabilitation sessions at Zingari Richmond Football Club Gym, providing peer support and structured progressive exercise.",
+    "category": "Rehabilitation",
+    "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&h=600&fit=crop",
+    "badge": "Community",
+    "featured": true
+  },
+  {
+    "id": "self-management",
+    "name": "Self-Management Strategies",
+    "description": "Learn practical strategies to manage your condition independently, including pain management techniques, activity modification, and home exercises.",
+    "category": "Education",
+    "image": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&h=600&fit=crop",
+    "badge": "Essential",
+    "featured": true
+  },
+  {
+    "id": "follow-up-review",
+    "name": "Progress Review Assessment",
+    "description": "Scheduled follow-up appointments to review your progress, adjust treatment plans, and determine next steps in your care pathway.",
+    "category": "Assessment",
+    "image": "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop",
+    "badge": "Follow-up",
+    "featured": false
+  },
+  {
+    "id": "imaging-referral",
+    "name": "Diagnostic Imaging Referral",
+    "description": "When clinically indicated, we can refer you for appropriate imaging investigations such as X-rays or MRI scans to support diagnosis.",
+    "category": "Consultation",
+    "image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&h=600&fit=crop",
+    "badge": "Diagnostic",
+    "featured": false
+  }
+]

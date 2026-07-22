@@ -1,0 +1,150 @@
+---
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SCOTS — What to Expect From Your Appointment</title>
+    <meta name="description" content="Southern Community Orthopaedic Triage Service patient guide." />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script is:inline>
+      // Define Alpine.js component functions on window BEFORE Alpine initializes
+      window.accessibilityTools = function() {
+        return {
+          reading: false,
+          textSize: 'normal',
+          highContrast: false,
+
+          toggleReadAloud() {
+            if (this.reading) {
+              window.speechSynthesis.cancel();
+              this.reading = false;
+              this._queue = [];
+              return;
+            }
+            var main = document.getElementById('main-content');
+            if (!main) return;
+
+            // Build a queue of text chunks with pause durations
+            var queue = [];
+            var sections = main.querySelectorAll('section');
+            for (var i = 0; i < sections.length; i++) {
+              // Get direct block-level children to split content naturally
+              var blocks = sections[i].querySelectorAll('h1, h2, h3, p, li, div.bg-\\[--navy\\]');
+              if (blocks.length === 0) {
+                var text = sections[i].innerText.trim();
+                if (text) queue.push({ text: text, pause: 900 });
+              } else {
+                for (var j = 0; j < blocks.length; j++) {
+                  var el = blocks[j];
+                  // Skip elements marked as no-read, or inside a no-read parent
+                  if (el.hasAttribute('data-no-read') || el.closest('[data-no-read]')) continue;
+                  // Skip child elements inside a data-read-once parent (parent will be read instead)
+                  if (el.parentElement && el.parentElement.hasAttribute('data-read-once')) continue;
+                  var txt = el.innerText.trim();
+                  if (!txt) continue;
+
+                  // Determine pause after this chunk
+                  var pauseAfter = 400; // default short pause
+                  var tag = el.tagName.toLowerCase();
+                  if (tag === 'h1' || tag === 'h2' || tag === 'h3') pauseAfter = 700;
+                  if (tag === 'li') pauseAfter = 500;
+
+                  queue.push({ text: txt, pause: pauseAfter });
+                }
+                // Longer pause between sections
+                queue.push({ text: '', pause: 900 });
+              }
+            }
+
+            // Filter out empty text entries except for pause-only markers
+            queue = queue.filter(function(item) { return item.text.length > 0 || item.pause > 600; });
+
+            if (queue.length === 0) return;
+
+            this._queue = queue;
+            this._currentIndex = 0;
+            this.reading = true;
+            var self = this;
+
+            function speakNext() {
+              if (self._currentIndex >= self._queue.length || !self.reading) {
+                self.reading = false;
+                return;
+              }
+              var item = self._queue[self._currentIndex];
+              self._currentIndex++;
+
+              // If empty text, it's just a pause marker
+              if (!item.text) {
+                setTimeout(speakNext, item.pause);
+                return;
+              }
+
+              var utterance = new SpeechSynthesisUtterance(item.text);
+              utterance.lang = 'en-NZ';
+              utterance.rate = 0.85;
+              utterance.pitch = 1;
+              utterance.onend = function() {
+                if (self.reading) {
+                  setTimeout(speakNext, item.pause);
+                } else {
+                  self.reading = false;
+                }
+              };
+              utterance.onerror = function() {
+                self.reading = false;
+              };
+              window.speechSynthesis.speak(utterance);
+            }
+
+            speakNext();
+          },
+
+          setSize(size) {
+            this.textSize = size;
+            document.documentElement.classList.remove('text-size-large', 'text-size-xlarge');
+            if (size === 'large') document.documentElement.classList.add('text-size-large');
+            if (size === 'xlarge') document.documentElement.classList.add('text-size-xlarge');
+          },
+
+          cycleSize() {
+            if (this.textSize === 'normal') this.setSize('large');
+            else if (this.textSize === 'large') this.setSize('xlarge');
+            else this.setSize('normal');
+          },
+
+          toggleContrast() {
+            this.highContrast = !this.highContrast;
+            document.documentElement.classList.toggle('high-contrast');
+          }
+        };
+      };
+    </script>
+  </head>
+  <body>
+    <slot />
+    <script is:inline>
+      // Fade-in scroll observer
+      document.addEventListener('DOMContentLoaded', function() {
+        var els = document.querySelectorAll('.fade-up');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          els.forEach(function(el) { el.classList.add('visible'); });
+          return;
+        }
+        var obs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+          });
+        }, { threshold: 0.1 });
+        els.forEach(function(el) { obs.observe(el); });
+      });
+    </script>
+  </body>
+</html>

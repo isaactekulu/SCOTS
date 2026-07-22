@@ -1,0 +1,23 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import TestimonialCard from './TestimonialCard.astro';
+import testimonials from '../data/testimonials.json';
+---
+
+<section id="testimonials" class="py-24">
+  <div class="container-custom">
+    <SectionTitle
+      title="Patient Testimonials"
+      subtitle="Hear from patients who have benefited from the SCOTS service."
+    />
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {testimonials.slice(0, 3).map((testimonial) => (
+        <TestimonialCard
+          name={testimonial.name}
+          reviewText={testimonial.reviewText}
+          rating={testimonial.rating}
+        />
+      ))}
+    </div>
+  </div>
+</section>

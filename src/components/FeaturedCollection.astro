@@ -1,0 +1,25 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import ProductCard from './ProductCard.astro';
+import { validateProducts } from '../utils/validateProducts';
+import productsData from '../data/products.json';
+
+const { valid } = validateProducts(productsData);
+const featuredProducts = valid.filter((p) => p.featured).slice(0, 6);
+---
+
+{featuredProducts.length > 0 && (
+  <section id="services" class="py-24 bg-surface">
+    <div class="container-custom">
+      <SectionTitle
+        title="Our Services"
+        subtitle="Comprehensive musculoskeletal care designed to get you on the right pathway to recovery."
+      />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {featuredProducts.map((product) => (
+          <ProductCard {...product} />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

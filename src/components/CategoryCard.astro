@@ -1,0 +1,22 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+  iconLabel: string;
+}
+
+const { icon, title, description, iconLabel } = Astro.props;
+---
+
+<article class="group bg-white rounded-xl border border-border p-8 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-primary/20">
+  <div class="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105" aria-label={iconLabel}>
+    <Fragment set:html={icon} />
+  </div>
+  <h3 class="text-lg font-semibold text-text-primary mb-3">
+    {title}
+  </h3>
+  <p class="text-sm text-text-secondary leading-relaxed">
+    {description}
+  </p>
+</article>

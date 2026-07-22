@@ -1,0 +1,71 @@
+---
+import SectionTitle from './SectionTitle.astro';
+
+const stats = [
+  { value: '5+', label: 'Service Locations' },
+  { value: '1000+', label: 'Patients Supported' },
+  { value: '4', label: 'Program Types' },
+  { value: '95%', label: 'Patient Satisfaction' },
+];
+---
+
+<section id="about" class="py-24">
+  <div class="container-custom">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <!-- Content -->
+      <div>
+        <SectionTitle
+          title="About SCOTS"
+          subtitle="Southern Community Orthopedic Triage Service"
+          alignment="left"
+        />
+        <div class="space-y-4 text-text-secondary leading-relaxed">
+          <p>
+            SCOTS is designed to help patients with musculoskeletal conditions access the right care, at the right time, in the right place. We provide expert assessment and guidance for people experiencing these problems, ensuring that treatment pathways are clear, appropriate, and effective.
+          </p>
+          <p>
+            We work closely with GPs, community providers, and Orthopaedic teams to determine whether a patient is best managed with targeted non-surgical treatment, further investigation, or referral for orthopaedic opinion.
+          </p>
+          <p class="font-medium text-text-primary">
+            Our mission is to ensure patients who need surgery are identified and referred appropriately, while supporting effective non-operative care where possible.
+          </p>
+        </div>
+
+        <!-- Values -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          {['Patient-Centred', 'Evidence-Based', 'Accessible', 'Collaborative'].map((value) => (
+            <span class="text-sm font-medium text-primary bg-primary/10 px-4 py-2 rounded-full">
+              {value}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Image + Stats -->
+      <div class="space-y-8">
+        <div class="aspect-[4/3] rounded-2xl overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&h=600&fit=crop"
+            alt="Healthcare team discussing patient care at SCOTS facility"
+            width={800}
+            height={600}
+            loading="lazy"
+            decoding="async"
+            class="w-full h-full object-cover"
+            onerror="this.style.display='none';this.parentElement.classList.add('bg-surface');"
+          />
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          {stats.map((stat) => (
+            <div class="bg-surface rounded-xl p-6 text-center border border-border">
+              <p class="text-2xl font-bold text-primary mb-1">{stat.value}</p>
+              <p class="text-sm text-text-secondary">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

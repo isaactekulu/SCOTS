@@ -1,0 +1,93 @@
+---
+import Button from './Button.astro';
+---
+
+<section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+  <!-- Background gradient -->
+  <div class="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-emerald-50" aria-hidden="true"></div>
+  
+  <!-- Decorative shapes -->
+  <div class="absolute top-20 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" aria-hidden="true"></div>
+  <div class="absolute bottom-20 left-0 w-72 h-72 bg-accent/5 rounded-full blur-3xl" aria-hidden="true"></div>
+
+  <div class="container-custom relative z-10 py-32 md:py-0">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Content -->
+      <div class="hero-content opacity-0 animate-fade-in">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-text-primary leading-tight mb-6">
+          The Right Care,<br />
+          <span class="text-primary">At the Right Time</span>
+        </h1>
+        <p class="text-lg md:text-xl text-text-secondary leading-relaxed mb-8 max-w-lg">
+          Expert musculoskeletal assessment and guidance, ensuring clear and effective treatment pathways for your recovery.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <Button href="#services" variant="primary" size="lg">
+            Explore Services
+          </Button>
+          <Button href="#contact" variant="secondary" size="lg">
+            Get in Touch
+          </Button>
+        </div>
+      </div>
+
+      <!-- Hero Image -->
+      <div class="hero-content opacity-0 animate-fade-in animation-delay-200 hidden md:block">
+        <div class="relative">
+          <div class="aspect-square bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=800&fit=crop"
+              alt="Healthcare professional providing musculoskeletal assessment"
+              width={800}
+              height={800}
+              class="w-full h-full object-cover rounded-3xl"
+              onerror="this.style.display='none'"
+            />
+          </div>
+          <!-- Floating stats badge -->
+          <div class="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg p-4 border border-border">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-text-primary">Evidence-Based</p>
+                <p class="text-xs text-text-secondary">Care Pathways</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in {
+      animation: none;
+      opacity: 1;
+    }
+  }
+</style>

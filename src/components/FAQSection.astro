@@ -1,0 +1,71 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import faqData from '../data/faq.json';
+---
+
+<section id="faq" class="py-24">
+  <div class="container-custom">
+    <SectionTitle
+      title="Frequently Asked Questions"
+      subtitle="Common questions about the SCOTS service and what to expect from your appointment."
+    />
+    <div class="max-w-3xl mx-auto" x-data="{ activeIndex: null }">
+      {faqData.map((item, index) => (
+        <div class="border-b border-border">
+          <button
+            class="w-full flex items-center justify-between py-5 px-2 text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md"
+            @click={`activeIndex = activeIndex === ${index} ? null : ${index}`}
+            :aria-expanded={`activeIndex === ${index}`}
+            aria-controls={`faq-panel-${index}`}
+            @keydown.enter={`activeIndex = activeIndex === ${index} ? null : ${index}`}
+            @keydown.space.prevent={`activeIndex = activeIndex === ${index} ? null : ${index}`}
+          >
+            <span class="text-base font-medium text-text-primary pr-4">
+              {item.question}
+            </span>
+            <svg
+              class="w-5 h-5 text-text-secondary flex-shrink-0 transition-transform duration-200"
+              :class={`activeIndex === ${index} ? 'rotate-180' : ''`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div
+            id={`faq-panel-${index}`}
+            x-show={`activeIndex === ${index}`}
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-1"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-1"
+            x-cloak
+            role="region"
+            aria-labelledby={`faq-trigger-${index}`}
+            class="pb-5 px-2"
+          >
+            <p class="text-text-secondary leading-relaxed">
+              {item.answer}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  [x-cloak] {
+    display: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [x-transition] {
+      transition-duration: 0ms !important;
+    }
+  }
+</style>

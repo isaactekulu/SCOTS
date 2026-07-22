@@ -1,0 +1,347 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="min-h-screen bg-[#f5f0e8]" x-data="tripPlanner()">
+
+    <!-- Top bar -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#e4e0d8] px-5 h-14 flex items-center justify-between">
+      <button
+        x-show="step > 1"
+        @click="prevStep()"
+        class="text-[--teal] text-sm font-medium flex items-center gap-1"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <span x-show="step === 1" class="w-10"></span>
+      <p class="text-[13px] text-[--text-muted] font-medium mb-0">
+        Step <span x-text="step"></span> of 5
+      </p>
+      <button
+        x-show="step < 5"
+        @click="if(canProceed()) nextStep()"
+        :class="canProceed() ? 'text-[--teal]' : 'text-[#ccc] pointer-events-none'"
+        class="text-sm font-semibold"
+      >
+        Skip
+      </button>
+      <span x-show="step === 5" class="w-10"></span>
+    </header>
+
+    <!-- Progress bar -->
+    <div class="h-1 bg-[#e4e0d8]">
+      <div
+        class="h-full bg-[--teal] transition-all duration-500 ease-out"
+        :style="`width: ${(step / 5) * 100}%`"
+      ></div>
+    </div>
+
+    <!-- Step content -->
+    <div class="px-5 py-8 pb-32 max-w-lg mx-auto">
+
+      <!-- STEP 1: Where are you going? -->
+      <div x-show="step === 1" x-transition>
+        <h1 class="text-2xl font-bold text-[--navy] mb-2">Where are you going?</h1>
+        <p class="text-[--text-muted] text-[15px] mb-6">Pick your destination. You can change this later.</p>
+
+        <div class="space-y-2">
+          <template x-for="dest in destinations" :key="dest.id">
+            <button
+              @click="trip.destination = dest.id"
+              :class="trip.destination === dest.id ? 'border-[--teal] bg-[--teal]/5' : 'border-[#e4e0d8] bg-white'"
+              class="w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-between"
+            >
+              <div>
+                <p class="font-semibold text-[15px] text-[--text] mb-0.5" x-text="dest.name"></p>
+                <p class="text-[13px] text-[--text-muted] mb-0" x-text="dest.description"></p>
+              </div>
+              <div
+                x-show="trip.destination === dest.id"
+                class="w-6 h-6 rounded-full bg-[--teal] flex items-center justify-center flex-shrink-0 ml-3"
+              >
+                <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+              </div>
+            </button>
+          </template>
+        </div>
+      </div>
+
+      <!-- STEP 2: When are you travelling? -->
+      <div x-show="step === 2" x-transition>
+        <h1 class="text-2xl font-bold text-[--navy] mb-2">When are you travelling?</h1>
+        <p class="text-[--text-muted] text-[15px] mb-6">Choose your travel dates. Approximate is fine.</p>
+
+        <div class="space-y-4">
+          <div>
+            <label class="text-[13px] font-semibold text-[--text] block mb-2">Departure date</label>
+            <input
+              type="date"
+              x-model="trip.departDate"
+              class="w-full px-4 py-3.5 rounded-xl border-2 border-[#e4e0d8] bg-white text-[--text] text-[15px] focus:border-[--teal] focus:outline-none transition-colors"
+            />
+          </div>
+          <div>
+            <label class="text-[13px] font-semibold text-[--text] block mb-2">Return date</label>
+            <input
+              type="date"
+              x-model="trip.returnDate"
+              class="w-full px-4 py-3.5 rounded-xl border-2 border-[#e4e0d8] bg-white text-[--text] text-[15px] focus:border-[--teal] focus:outline-none transition-colors"
+            />
+          </div>
+        </div>
+
+        <!-- Helper -->
+        <div class="mt-5 bg-[--teal]/5 border border-[--teal]/20 rounded-xl p-4">
+          <p class="text-[13px] text-[--teal] font-medium mb-1">Not sure of exact dates?</p>
+          <p class="text-[13px] text-[--text-muted] mb-0">That's OK — pick your best guess. You can update this at any time from the trip summary.</p>
+        </div>
+      </div>
+
+      <!-- STEP 3: How many people? -->
+      <div x-show="step === 3" x-transition>
+        <h1 class="text-2xl font-bold text-[--navy] mb-2">How many travellers?</h1>
+        <p class="text-[--text-muted] text-[15px] mb-6">Include yourself in the count.</p>
+
+        <div class="space-y-4">
+          <div class="flex items-center justify-between bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4">
+            <div>
+              <p class="font-semibold text-[15px] text-[--text] mb-0">Adults</p>
+              <p class="text-[13px] text-[--text-muted] mb-0">13 years and over</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <button
+                @click="if(trip.adults > 1) trip.adults--"
+                :class="trip.adults <= 1 ? 'opacity-30' : ''"
+                class="w-9 h-9 rounded-full border-2 border-[#e4e0d8] flex items-center justify-center text-[--text] font-bold text-lg"
+              >−</button>
+              <span class="text-lg font-semibold text-[--text] w-6 text-center" x-text="trip.adults"></span>
+              <button
+                @click="trip.adults++"
+                class="w-9 h-9 rounded-full border-2 border-[--teal] text-[--teal] flex items-center justify-center font-bold text-lg"
+              >+</button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4">
+            <div>
+              <p class="font-semibold text-[15px] text-[--text] mb-0">Children</p>
+              <p class="text-[13px] text-[--text-muted] mb-0">2–12 years</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <button
+                @click="if(trip.children > 0) trip.children--"
+                :class="trip.children <= 0 ? 'opacity-30' : ''"
+                class="w-9 h-9 rounded-full border-2 border-[#e4e0d8] flex items-center justify-center text-[--text] font-bold text-lg"
+              >−</button>
+              <span class="text-lg font-semibold text-[--text] w-6 text-center" x-text="trip.children"></span>
+              <button
+                @click="trip.children++"
+                class="w-9 h-9 rounded-full border-2 border-[--teal] text-[--teal] flex items-center justify-center font-bold text-lg"
+              >+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: What do you need? -->
+      <div x-show="step === 4" x-transition>
+        <h1 class="text-2xl font-bold text-[--navy] mb-2">What do you need?</h1>
+        <p class="text-[--text-muted] text-[15px] mb-6">Pick the services you want. You can add more later.</p>
+
+        <div class="grid grid-cols-2 gap-3">
+          <template x-for="svc in serviceOptions" :key="svc.id">
+            <button
+              @click="toggleService(svc.id)"
+              :class="trip.services.includes(svc.id) ? 'border-[--teal] bg-[--teal]/5' : 'border-[#e4e0d8] bg-white'"
+              class="flex flex-col items-center gap-2 py-5 px-3 rounded-xl border-2 transition-all duration-200"
+            >
+              <div
+                :class="trip.services.includes(svc.id) ? 'bg-[--teal]/20 text-[--teal]' : 'bg-[#e8e4dc] text-[--text-muted]'"
+                class="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+              >
+                <span x-html="svc.icon" class="w-5 h-5"></span>
+              </div>
+              <span
+                :class="trip.services.includes(svc.id) ? 'text-[--teal] font-semibold' : 'text-[--text-muted]'"
+                class="text-[13px] transition-colors"
+                x-text="svc.label"
+              ></span>
+            </button>
+          </template>
+        </div>
+
+        <div class="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4" x-show="trip.services.length === 0">
+          <p class="text-[13px] text-amber-700 mb-0">Select at least one service so we can help plan your trip.</p>
+        </div>
+      </div>
+
+      <!-- STEP 5: Review your trip -->
+      <div x-show="step === 5" x-transition>
+        <h1 class="text-2xl font-bold text-[--navy] mb-2">Your trip summary</h1>
+        <p class="text-[--text-muted] text-[15px] mb-6">Review everything below. Tap any item to go back and change it.</p>
+
+        <div class="space-y-3">
+          <!-- Destination -->
+          <button @click="step = 1" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors">
+            <div>
+              <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Destination</p>
+              <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="getDestinationName()"></p>
+            </div>
+            <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          </button>
+
+          <!-- Dates -->
+          <button @click="step = 2" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors">
+            <div>
+              <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Dates</p>
+              <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="formatDates()"></p>
+            </div>
+            <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          </button>
+
+          <!-- Travellers -->
+          <button @click="step = 3" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors">
+            <div>
+              <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Travellers</p>
+              <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="formatTravellers()"></p>
+            </div>
+            <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          </button>
+
+          <!-- Services -->
+          <button @click="step = 4" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors">
+            <div>
+              <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Services needed</p>
+              <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="formatServices()"></p>
+            </div>
+            <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          </button>
+        </div>
+
+        <!-- Success helper -->
+        <div class="mt-6 bg-[--teal]/5 border border-[--teal]/20 rounded-xl p-4">
+          <p class="text-[13px] text-[--teal] font-medium mb-1">Everything look right?</p>
+          <p class="text-[13px] text-[--text-muted] mb-0">Tap "Create Trip" below to save. You can always edit your trip later from the My Trip tab.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fixed bottom CTA -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#e4e0d8] px-5 py-4 z-50">
+      <button
+        @click="step < 5 ? nextStep() : createTrip()"
+        :class="canProceed() ? 'bg-[--teal] shadow-lg shadow-[--teal]/20' : 'bg-[#ccc]'"
+        :disabled="!canProceed()"
+        class="w-full py-4 rounded-xl text-white font-semibold text-[15px] transition-all duration-200"
+        x-text="step < 5 ? 'Continue' : 'Create Trip'"
+      ></button>
+      <p class="text-center text-[12px] text-[--text-muted] mt-2 mb-0" x-show="!canProceed()">
+        <span x-show="step === 1">Please select a destination</span>
+        <span x-show="step === 2">Please choose at least a departure date</span>
+        <span x-show="step === 4">Please select at least one service</span>
+      </p>
+    </div>
+
+    <!-- Success overlay -->
+    <div
+      x-show="showSuccess"
+      x-transition.opacity
+      x-cloak
+      class="fixed inset-0 z-[100] bg-[--navy]/90 flex items-center justify-center px-6"
+    >
+      <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center">
+        <div class="w-16 h-16 rounded-full bg-[--teal]/10 flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-[--teal]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h2 class="text-[--navy] text-xl font-bold mb-2">Trip created!</h2>
+        <p class="text-[--text-muted] text-[15px] mb-6">Your trip has been saved. You can view and edit it anytime.</p>
+        <button @click="showSuccess = false; resetTrip()" class="w-full py-3.5 bg-[--teal] text-white font-semibold rounded-xl">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function tripPlanner() {
+      return {
+        step: 1,
+        showSuccess: false,
+        trip: {
+          destination: '',
+          departDate: '',
+          returnDate: '',
+          adults: 1,
+          children: 0,
+          services: [],
+        },
+        destinations: [
+          { id: 'honiara', name: 'Honiara', description: 'Capital city — flights, tours, hotels' },
+          { id: 'gizo', name: 'Gizo', description: 'Western Province — diving, island trips' },
+          { id: 'munda', name: 'Munda', description: 'Lagoon access — fishing, culture' },
+          { id: 'marovo', name: 'Marovo Lagoon', description: 'World heritage — eco-tourism' },
+          { id: 'tulagi', name: 'Tulagi', description: 'Central Province — history, diving' },
+        ],
+        serviceOptions: [
+          { id: 'flights', label: 'Flights', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>' },
+          { id: 'boats', label: 'Boats', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 17h18M5 12l2-2 5-1 5 1 2 2"/></svg>' },
+          { id: 'stays', label: 'Stays', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>' },
+          { id: 'tours', label: 'Tours', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/></svg>' },
+          { id: 'diving', label: 'Diving', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/></svg>' },
+          { id: 'transfers', label: 'Transfers', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>' },
+          { id: 'guides', label: 'Guides', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>' },
+          { id: 'hire', label: 'Hire', icon: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>' },
+        ],
+        nextStep() {
+          if (this.canProceed() && this.step < 5) this.step++;
+        },
+        prevStep() {
+          if (this.step > 1) this.step--;
+        },
+        canProceed() {
+          if (this.step === 1) return this.trip.destination !== '';
+          if (this.step === 2) return this.trip.departDate !== '';
+          if (this.step === 3) return true;
+          if (this.step === 4) return this.trip.services.length > 0;
+          return true;
+        },
+        toggleService(id) {
+          const idx = this.trip.services.indexOf(id);
+          if (idx > -1) this.trip.services.splice(idx, 1);
+          else this.trip.services.push(id);
+        },
+        createTrip() {
+          this.showSuccess = true;
+        },
+        resetTrip() {
+          this.step = 1;
+          this.trip = { destination: '', departDate: '', returnDate: '', adults: 1, children: 0, services: [] };
+        },
+        getDestinationName() {
+          const d = this.destinations.find(x => x.id === this.trip.destination);
+          return d ? d.name : 'Not selected';
+        },
+        formatDates() {
+          if (!this.trip.departDate) return 'Not selected';
+          let s = this.trip.departDate;
+          if (this.trip.returnDate) s += ' → ' + this.trip.returnDate;
+          return s;
+        },
+        formatTravellers() {
+          let s = this.trip.adults + ' adult' + (this.trip.adults > 1 ? 's' : '');
+          if (this.trip.children > 0) s += ', ' + this.trip.children + ' child' + (this.trip.children > 1 ? 'ren' : '');
+          return s;
+        },
+        formatServices() {
+          if (this.trip.services.length === 0) return 'None selected';
+          return this.trip.services.map(id => {
+            const svc = this.serviceOptions.find(s => s.id === id);
+            return svc ? svc.label : id;
+          }).join(', ');
+        },
+      };
+    }
+  </script>
+</Layout>
