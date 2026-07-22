@@ -9,120 +9,86 @@ import '../styles/global.css';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SCOTS — What to Expect From Your Appointment</title>
     <meta name="description" content="Southern Community Orthopaedic Triage Service patient guide." />
+    <meta name="theme-color" content="#00263e" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <script is:inline>
-      // Define Alpine.js component functions on window BEFORE Alpine initializes
       window.accessibilityTools = function() {
         return {
           reading: false,
           textSize: 'normal',
           highContrast: false,
+          colorBlind: false,
 
           toggleReadAloud() {
             if (this.reading) {
               window.speechSynthesis.cancel();
               this.reading = false;
-              this._queue = [];
               return;
             }
             var main = document.getElementById('main-content');
             if (!main) return;
 
-            // Build a queue of text chunks with pause durations
             var queue = [];
-            var sections = main.querySelectorAll('section');
-            for (var i = 0; i < sections.length; i++) {
-              // Get direct block-level children to split content naturally
-              var blocks = sections[i].querySelectorAll('h1, h2, h3, p, li, div.bg-\\[--navy\\]');
-              if (blocks.length === 0) {
-                var text = sections[i].innerText.trim();
-                if (text) queue.push({ text: text, pause: 900 });
-              } else {
-                for (var j = 0; j < blocks.length; j++) {
-                  var el = blocks[j];
-                  // Skip elements marked as no-read, or inside a no-read parent
-                  if (el.hasAttribute('data-no-read') || el.closest('[data-no-read]')) continue;
-                  // Skip child elements inside a data-read-once parent (parent will be read instead)
-                  if (el.parentElement && el.parentElement.hasAttribute('data-read-once')) continue;
-                  var txt = el.innerText.trim();
-                  if (!txt) continue;
-
-                  // Determine pause after this chunk
-                  var pauseAfter = 400; // default short pause
-                  var tag = el.tagName.toLowerCase();
-                  if (tag === 'h1' || tag === 'h2' || tag === 'h3') pauseAfter = 700;
-                  if (tag === 'li') pauseAfter = 500;
-
-                  queue.push({ text: txt, pause: pauseAfter });
-                }
-                // Longer pause between sections
-                queue.push({ text: '', pause: 900 });
-              }
+            var blocks = main.querySelectorAll('h1, h2, h3, p, li');
+            for (var i = 0; i < blocks.length; i++) {
+              var el = blocks[i];
+              if (el.hasAttribute('data-no-read') || el.closest('[data-no-read]')) continue;
+              var txt = el.innerText.trim();
+              if (!txt) continue;
+              var tag = el.tagName.toLowerCase();
+              var pause = tag.match(/^h[1-3]$/) ? 700 : tag === 'li' ? 500 : 400;
+              queue.push({ text: txt, pause: pause });
             }
 
-            // Filter out empty text entries except for pause-only markers
-            queue = queue.filter(function(item) { return item.text.length > 0 || item.pause > 600; });
-
-            if (queue.length === 0) return;
-
+            if (!queue.length) return;
             this._queue = queue;
-            this._currentIndex = 0;
+            this._index = 0;
             this.reading = true;
             var self = this;
 
-            function speakNext() {
-              if (self._currentIndex >= self._queue.length || !self.reading) {
+            function next() {
+              if (self._index >= self._queue.length || !self.reading) {
                 self.reading = false;
                 return;
               }
-              var item = self._queue[self._currentIndex];
-              self._currentIndex++;
-
-              // If empty text, it's just a pause marker
-              if (!item.text) {
-                setTimeout(speakNext, item.pause);
-                return;
-              }
-
-              var utterance = new SpeechSynthesisUtterance(item.text);
-              utterance.lang = 'en-NZ';
-              utterance.rate = 0.85;
-              utterance.pitch = 1;
-              utterance.onend = function() {
-                if (self.reading) {
-                  setTimeout(speakNext, item.pause);
-                } else {
-                  self.reading = false;
-                }
-              };
-              utterance.onerror = function() {
-                self.reading = false;
-              };
-              window.speechSynthesis.speak(utterance);
+              var item = self._queue[self._index++];
+              var u = new SpeechSynthesisUtterance(item.text);
+              u.lang = 'en-NZ';
+              u.rate = 0.85;
+              u.onend = function() { self.reading ? setTimeout(next, item.pause) : null; };
+              u.onerror = function() { self.reading = false; };
+              window.speechSynthesis.speak(u);
             }
-
-            speakNext();
-          },
-
-          setSize(size) {
-            this.textSize = size;
-            document.documentElement.classList.remove('text-size-large', 'text-size-xlarge');
-            if (size === 'large') document.documentElement.classList.add('text-size-large');
-            if (size === 'xlarge') document.documentElement.classList.add('text-size-xlarge');
+            next();
           },
 
           cycleSize() {
-            if (this.textSize === 'normal') this.setSize('large');
-            else if (this.textSize === 'large') this.setSize('xlarge');
-            else this.setSize('normal');
+            var sizes = ['normal', 'large', 'xlarge'];
+            var i = (sizes.indexOf(this.textSize) + 1) % sizes.length;
+            this.textSize = sizes[i];
+            document.documentElement.classList.remove('text-size-large', 'text-size-xlarge');
+            if (this.textSize !== 'normal') document.documentElement.classList.add('text-size-' + this.textSize);
+            this.announce('Text size: ' + this.textSize);
           },
 
           toggleContrast() {
             this.highContrast = !this.highContrast;
             document.documentElement.classList.toggle('high-contrast');
+            this.announce(this.highContrast ? 'High contrast on' : 'High contrast off');
+          },
+
+          toggleColorBlind() {
+            this.colorBlind = !this.colorBlind;
+            document.documentElement.classList.toggle('color-blind-mode');
+            this.announce(this.colorBlind ? 'Color blind mode on' : 'Color blind mode off');
+          },
+
+          announce(msg) {
+            var el = document.getElementById('a11y-announce');
+            if (el) { el.textContent = ''; setTimeout(function() { el.textContent = msg; }, 50); }
           }
         };
       };
@@ -130,8 +96,8 @@ import '../styles/global.css';
   </head>
   <body>
     <slot />
+    <noscript><style>.fade-up { opacity: 1 !important; transform: none !important; }</style></noscript>
     <script is:inline>
-      // Fade-in scroll observer
       document.addEventListener('DOMContentLoaded', function() {
         var els = document.querySelectorAll('.fade-up');
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

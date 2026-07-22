@@ -3,75 +3,57 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-  <!-- Skip to content -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[--focus] focus:text-white focus:px-5 focus:py-3 focus:rounded-lg focus:text-lg focus:font-semibold no-underline">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[--focus] focus:text-white focus:px-5 focus:py-3 focus:rounded-lg focus:text-lg focus:font-semibold no-underline focus:min-h-0 focus:min-w-0">
     Skip to main content
   </a>
 
-  <!-- Floating Accessibility Controls — bottom right -->
-  <div class="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3" x-data="accessibilityTools()">
-    <!-- Read Aloud with tooltip -->
-    <div class="relative group">
-      <span class="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-[--navy] text-white text-xs font-medium px-3 py-2 rounded-lg shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden="true" data-no-read>
-        Listen to this page
-      </span>
-      <button
-        @click="toggleReadAloud()"
-        :class="reading ? 'bg-red-500 text-white' : 'bg-gradient-to-br from-[--navy] to-[--navy-light] text-white'"
-        class="w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
-        :aria-label="reading ? 'Stop reading aloud' : 'Listen to this page read aloud'"
-      >
-        <svg x-show="!reading" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
-        <svg x-show="reading" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
-      </button>
-    </div>
+  <div id="a11y-announce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
-    <!-- Text Size Up -->
-    <button
-      @click="cycleSize()"
-      class="w-12 h-12 rounded-full bg-white border-2 border-[--border] shadow-md flex items-center justify-center hover:scale-105 transition-transform text-[--navy] font-bold text-sm"
-      aria-label="Increase text size"
-      x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'"
-    ></button>
-
-    <!-- High Contrast -->
-    <button
-      @click="toggleContrast()"
-      :class="highContrast ? 'bg-yellow-400 border-yellow-500 text-black' : 'bg-white border-[--border] text-[--navy]'"
-      class="w-12 h-12 rounded-full border-2 shadow-md flex items-center justify-center hover:scale-105 transition-transform"
-      aria-label="Toggle high contrast mode"
-    >
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
-    </button>
-  </div>
-
-  <!-- Simple navigation -->
-  <header class="sticky top-0 z-50 bg-gradient-to-r from-[--navy] to-[--navy-mid] border-b border-white/10" x-data="{ open: false }">
+  <header class="sticky top-0 z-50 bg-gradient-to-r from-[--navy] to-[--navy-mid] border-b border-white/10" x-data="accessibilityTools()" role="banner">
     <div class="max-w-[900px] mx-auto px-6 flex items-center justify-between h-16">
-      <a href="#" class="no-underline text-white font-bold text-xl tracking-tight flex items-center gap-2 min-h-[48px]">
-        <span aria-hidden="true">&#9679;</span> SCOTS
-      </a>
-      <nav class="hidden md:flex gap-4" aria-label="Main navigation">
-        <a href="#referral" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">Referral</a>
-        <a href="#appointment" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">Appointment</a>
-        <a href="#outcomes" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">After Care</a>
-        <a href="#locations" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">Locations</a>
-      </nav>
-      <button @click="open = !open" :aria-expanded="open.toString()" aria-controls="mobile-menu" class="md:hidden w-12 h-12 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors text-white" aria-label="Open menu">
-        <svg x-show="!open" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <svg x-show="open" x-cloak class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <!-- Mobile menu -->
-    <div id="mobile-menu" x-show="open" x-cloak x-transition class="md:hidden border-t border-white/10 bg-gradient-to-b from-[--navy-mid] to-[--navy] px-6 py-5 space-y-2">
-      <a href="#referral" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">Referral</a>
-      <a href="#appointment" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">Appointment</a>
-      <a href="#outcomes" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">After Care</a>
-      <a href="#locations" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">Locations</a>
+      <span class="text-white font-bold text-xl tracking-tight">SCOTS</span>
+
+      <div class="flex items-center gap-2" role="toolbar" aria-label="Accessibility tools">
+        <button
+          @click="toggleReadAloud()"
+          :class="reading ? 'bg-red-500' : 'bg-white/10 hover:bg-white/20'"
+          class="px-3 py-2 rounded-lg text-sm font-medium text-white whitespace-nowrap"
+          aria-label="Read this page aloud"
+          :aria-label="reading ? 'Stop reading' : 'Read this page aloud'"
+          :aria-pressed="reading.toString()"
+          x-text="reading ? 'Stop reading' : 'Read this page'"
+        >Read this page</button>
+
+        <button
+          @click="cycleSize()"
+          class="w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold text-sm"
+          aria-label="Change text size"
+          x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'"
+        ></button>
+
+        <button
+          @click="toggleContrast()"
+          :class="highContrast ? 'bg-yellow-400 text-black' : 'bg-white/10 hover:bg-white/20 text-white'"
+          class="w-11 h-11 rounded-lg flex items-center justify-center"
+          aria-label="Toggle high contrast"
+          :aria-pressed="highContrast.toString()"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
+        </button>
+
+        <button
+          @click="toggleColorBlind()"
+          :class="colorBlind ? 'bg-orange-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'"
+          class="w-11 h-11 rounded-lg flex items-center justify-center"
+          aria-label="Toggle color blind mode"
+          :aria-pressed="colorBlind.toString()"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Main content -->
   <main id="main-content">
     <!-- Hero -->
     <section class="bg-white border-b-2 border-[--border]" aria-labelledby="page-title">
@@ -83,7 +65,6 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </section>
 
-    <!-- Content -->
     <div class="max-w-[900px] mx-auto px-6">
 
       <!-- Referral -->
@@ -93,34 +74,34 @@ import Layout from '../layouts/Layout.astro';
           You have been referred to SCOTS to assess your musculoskeletal condition. This means problems with your <strong>joints, muscles, or soft tissues</strong>. We will work out the best next step for your care.
         </p>
         <p class="text-[--text] font-medium mb-3">This may include:</p>
-        <ul class="list-none space-y-3 mb-0 pl-0" role="list">
+        <ul class="list-none space-y-3 pl-0" role="list">
           <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5">
-            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-[--text]">Advice and education</span>
+            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span>Advice and education</span>
           </li>
           <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5">
-            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-[--text]">A structured rehabilitation plan</span>
+            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span>A structured rehabilitation plan</span>
           </li>
           <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5">
-            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-[--text]">An education program</span>
+            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span>An education program</span>
           </li>
           <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5">
-            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-[--text]">Referral for X-rays or scans (if needed)</span>
+            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span>Referral for X-rays or scans (if needed)</span>
           </li>
           <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5">
-            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-[--text]">Referral to a bone and joint specialist</span>
+            <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            <span>Referral to a bone and joint specialist</span>
           </li>
         </ul>
       </section>
 
       <!-- Surgeon -->
-      <section id="surgeon" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="surgeon-heading">
+      <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="surgeon-heading">
         <h2 id="surgeon-heading" class="text-[--navy] mb-5">Will I see a surgeon?</h2>
-        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mb-5" data-read-once>
+        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mb-5">
           <p class="text-white text-2xl font-bold mb-0">No, not at this stage.</p>
         </div>
         <p class="text-[--text-muted]">
@@ -154,19 +135,19 @@ import Layout from '../layouts/Layout.astro';
         <ol class="list-none space-y-4 pl-0 mb-6" role="list">
           <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
             <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">1</span>
-            <span class="text-[--text] font-medium">Listen to your concerns and goals</span>
+            <span class="font-medium">Listen to your concerns and goals</span>
           </li>
           <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
             <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">2</span>
-            <span class="text-[--text] font-medium">Assess your condition</span>
+            <span class="font-medium">Assess your condition</span>
           </li>
           <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
             <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">3</span>
-            <span class="text-[--text] font-medium">Review any previous treatment</span>
+            <span class="font-medium">Review any previous treatment</span>
           </li>
           <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
             <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">4</span>
-            <span class="text-[--text] font-medium">Discuss your options together</span>
+            <span class="font-medium">Discuss your options together</span>
           </li>
         </ol>
         <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6">
@@ -174,7 +155,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </section>
 
-      <!-- Surgery & Physio -->
+      <!-- Surgery -->
       <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="surgery-heading">
         <h2 id="surgery-heading" class="text-[--navy] mb-5">What if I think I need surgery?</h2>
         <p class="text-[--text-muted]">
@@ -188,6 +169,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </section>
 
+      <!-- Physio -->
       <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="physio-heading">
         <h2 id="physio-heading" class="text-[--navy] mb-5">What if I have already tried physiotherapy?</h2>
         <p class="text-[--text-muted]">That is helpful information. We will look at:</p>
@@ -206,30 +188,30 @@ import Layout from '../layouts/Layout.astro';
         <h2 id="outcomes-heading" class="text-[--navy] mb-5">What happens after the assessment?</h2>
         <p class="text-[--text-muted] mb-5">Depending on your results, we may:</p>
         <ul class="list-none space-y-3 pl-0" role="list">
-          <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Start or adjust a rehabilitation plan</li>
-          <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Invite you to an education program</li>
-          <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Discharge you with advice</li>
-          <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Refer you for X-rays or scans</li>
-          <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Refer you for a surgical opinion</li>
+          <li class="bg-white border border-[--border] rounded-lg px-5 py-4">Start or adjust a rehabilitation plan</li>
+          <li class="bg-white border border-[--border] rounded-lg px-5 py-4">Invite you to an education program</li>
+          <li class="bg-white border border-[--border] rounded-lg px-5 py-4">Discharge you with advice</li>
+          <li class="bg-white border border-[--border] rounded-lg px-5 py-4">Refer you for X-rays or scans</li>
+          <li class="bg-white border border-[--border] rounded-lg px-5 py-4">Refer you for a surgical opinion</li>
         </ul>
         <p class="text-[--text-muted] mt-5">If treatment is recommended, we will set a clear timeframe and check on your progress.</p>
       </section>
 
       <!-- Prepare -->
-      <section id="prepare" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="prepare-heading">
+      <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="prepare-heading">
         <h2 id="prepare-heading" class="text-[--navy] mb-5">How to prepare for your appointment</h2>
         <div class="space-y-4">
           <div class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
             <span class="w-10 h-10 rounded-full bg-[--teal-light] text-[--navy] flex items-center justify-center font-bold text-lg flex-shrink-0">A</span>
-            <span class="text-[--text]">Bring any scan reports or letters</span>
+            <span>Bring any scan reports or letters</span>
           </div>
           <div class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
             <span class="w-10 h-10 rounded-full bg-[--teal-light] text-[--navy] flex items-center justify-center font-bold text-lg flex-shrink-0">B</span>
-            <span class="text-[--text]">Wear comfortable clothing</span>
+            <span>Wear comfortable clothing</span>
           </div>
           <div class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4">
             <span class="w-10 h-10 rounded-full bg-[--teal-light] text-[--navy] flex items-center justify-center font-bold text-lg flex-shrink-0">C</span>
-            <span class="text-[--text]">Think about how your condition affects daily life</span>
+            <span>Think about how your condition affects daily life</span>
           </div>
         </div>
         <p class="text-[--text-muted] mt-6">If you have questions, speak with your GP or the person who referred you.</p>
@@ -241,36 +223,36 @@ import Layout from '../layouts/Layout.astro';
         <div class="space-y-5">
           <div class="bg-white border border-[--border] rounded-xl p-6">
             <p class="font-bold text-[--navy] mb-2">Assessment Clinics</p>
-            <p class="text-[--text] mb-1">Te Kaika Wellbeing Hub</p>
+            <p class="mb-1">Te Kaika Wellbeing Hub</p>
             <a href="https://www.google.com/maps/dir/?api=1&destination=Te+Kaika+Wellbeing+Hub+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium mb-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Get directions<span class="sr-only"> (opens in new tab)</span>
             </a>
-            <p class="text-[--text] mb-1">Zingari Richmond Football Club</p>
+            <p class="mb-1">Zingari Richmond Football Club</p>
             <a href="https://www.google.com/maps/dir/?api=1&destination=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Get directions<span class="sr-only"> (opens in new tab)</span>
             </a>
           </div>
           <div class="bg-white border border-[--border] rounded-xl p-6">
             <p class="font-bold text-[--navy] mb-2">Rehabilitation</p>
-            <p class="text-[--text] mb-1">Zingari Richmond Football Club Gym</p>
+            <p class="mb-1">Zingari Richmond Football Club Gym</p>
             <a href="https://www.google.com/maps/dir/?api=1&destination=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Get directions<span class="sr-only"> (opens in new tab)</span>
             </a>
           </div>
           <div class="bg-white border border-[--border] rounded-xl p-6">
             <p class="font-bold text-[--navy] mb-2">Education Programs</p>
-            <p class="text-[--text] mb-1">Nutrition Clinic — Otago University</p>
+            <p class="mb-1">Nutrition Clinic — Otago University</p>
             <a href="https://www.google.com/maps/dir/?api=1&destination=University+of+Otago+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium mb-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Get directions<span class="sr-only"> (opens in new tab)</span>
             </a>
-            <p class="text-[--text] mb-1">Chatsford Retirement Village Events Centre</p>
+            <p class="mb-1">Chatsford Retirement Village Events Centre</p>
             <a href="https://www.google.com/maps/dir/?api=1&destination=Chatsford+Retirement+Village+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Get directions<span class="sr-only"> (opens in new tab)</span>
             </a>
           </div>
         </div>
@@ -278,13 +260,4 @@ import Layout from '../layouts/Layout.astro';
       </section>
     </div>
   </main>
-
-  <!-- Footer -->
-  <footer class="bg-gradient-to-r from-[--navy] to-[--navy-mid] py-10 mt-8" role="contentinfo">
-    <div class="max-w-[900px] mx-auto px-6 text-center">
-      <p class="text-white font-semibold text-lg mb-2">SCOTS</p>
-      <p class="text-white/60 mb-4">Southern Community Orthopaedic Triage Service</p>
-      <p class="text-white/40 text-sm mb-0">&copy; 2026 Health New Zealand | Te Whatu Ora</p>
-    </div>
-  </footer>
 </Layout>
