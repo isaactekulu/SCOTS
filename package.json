@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.0",
-    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/sitemap": "3.1.6",
     "@astrojs/tailwind": "^5.1.4",
     "alpinejs": "^3.14.8",
     "astro": "^4.16.18"

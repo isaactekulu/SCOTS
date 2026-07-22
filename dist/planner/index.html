@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SCOTS — What to Expect From Your Appointment</title><meta name="description" content="Southern Community Orthopaedic Triage Service patient guide."><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><script>
+      // Define Alpine.js component functions on window BEFORE Alpine initializes
+      window.accessibilityTools = function() {
+        return {
+          reading: false,
+          textSize: 'normal',
+          highContrast: false,
+
+          toggleReadAloud() {
+            if (this.reading) {
+              window.speechSynthesis.cancel();
+              this.reading = false;
+              this._queue = [];
+              return;
+            }
+            var main = document.getElementById('main-content');
+            if (!main) return;
+
+            // Build a queue of text chunks with pause durations
+            var queue = [];
+            var sections = main.querySelectorAll('section');
+            for (var i = 0; i < sections.length; i++) {
+              // Get direct block-level children to split content naturally
+              var blocks = sections[i].querySelectorAll('h1, h2, h3, p, li, div.bg-\\[--navy\\]');
+              if (blocks.length === 0) {
+                var text = sections[i].innerText.trim();
+                if (text) queue.push({ text: text, pause: 900 });
+              } else {
+                for (var j = 0; j < blocks.length; j++) {
+                  var el = blocks[j];
+                  // Skip elements marked as no-read, or inside a no-read parent
+                  if (el.hasAttribute('data-no-read') || el.closest('[data-no-read]')) continue;
+                  // Skip child elements inside a data-read-once parent (parent will be read instead)
+                  if (el.parentElement && el.parentElement.hasAttribute('data-read-once')) continue;
+                  var txt = el.innerText.trim();
+                  if (!txt) continue;
+
+                  // Determine pause after this chunk
+                  var pauseAfter = 400; // default short pause
+                  var tag = el.tagName.toLowerCase();
+                  if (tag === 'h1' || tag === 'h2' || tag === 'h3') pauseAfter = 700;
+                  if (tag === 'li') pauseAfter = 500;
+
+                  queue.push({ text: txt, pause: pauseAfter });
+                }
+                // Longer pause between sections
+                queue.push({ text: '', pause: 900 });
+              }
+            }
+
+            // Filter out empty text entries except for pause-only markers
+            queue = queue.filter(function(item) { return item.text.length > 0 || item.pause > 600; });
+
+            if (queue.length === 0) return;
+
+            this._queue = queue;
+            this._currentIndex = 0;
+            this.reading = true;
+            var self = this;
+
+            function speakNext() {
+              if (self._currentIndex >= self._queue.length || !self.reading) {
+                self.reading = false;
+                return;
+              }
+              var item = self._queue[self._currentIndex];
+              self._currentIndex++;
+
+              // If empty text, it's just a pause marker
+              if (!item.text) {
+                setTimeout(speakNext, item.pause);
+                return;
+              }
+
+              var utterance = new SpeechSynthesisUtterance(item.text);
+              utterance.lang = 'en-NZ';
+              utterance.rate = 0.85;
+              utterance.pitch = 1;
+              utterance.onend = function() {
+                if (self.reading) {
+                  setTimeout(speakNext, item.pause);
+                } else {
+                  self.reading = false;
+                }
+              };
+              utterance.onerror = function() {
+                self.reading = false;
+              };
+              window.speechSynthesis.speak(utterance);
+            }
+
+            speakNext();
+          },
+
+          setSize(size) {
+            this.textSize = size;
+            document.documentElement.classList.remove('text-size-large', 'text-size-xlarge');
+            if (size === 'large') document.documentElement.classList.add('text-size-large');
+            if (size === 'xlarge') document.documentElement.classList.add('text-size-xlarge');
+          },
+
+          cycleSize() {
+            if (this.textSize === 'normal') this.setSize('large');
+            else if (this.textSize === 'large') this.setSize('xlarge');
+            else this.setSize('normal');
+          },
+
+          toggleContrast() {
+            this.highContrast = !this.highContrast;
+            document.documentElement.classList.toggle('high-contrast');
+          }
+        };
+      };
+    </script><link rel="stylesheet" href="/_astro/index.DIemnMqw.css"><script type="module">
+</script>
+<script type="module" src="/_astro/page.D2RhrP0O.js"></script></head> <body>  <div class="min-h-screen bg-[#f5f0e8]" x-data="tripPlanner()"> <!-- Top bar --> <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-[#e4e0d8] px-5 h-14 flex items-center justify-between"> <button x-show="step > 1" @click="prevStep()" class="text-[--teal] text-sm font-medium flex items-center gap-1"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+Back
+</button> <span x-show="step === 1" class="w-10"></span> <p class="text-[13px] text-[--text-muted] font-medium mb-0">
+Step <span x-text="step"></span> of 5
+</p> <button x-show="step < 5" @click="if(canProceed()) nextStep()" :class="canProceed() ? 'text-[--teal]' : 'text-[#ccc] pointer-events-none'" class="text-sm font-semibold">
+Skip
+</button> <span x-show="step === 5" class="w-10"></span> </header> <!-- Progress bar --> <div class="h-1 bg-[#e4e0d8]"> <div class="h-full bg-[--teal] transition-all duration-500 ease-out" :style="`width: ${(step / 5) * 100}%`"></div> </div> <!-- Step content --> <div class="px-5 py-8 pb-32 max-w-lg mx-auto"> <!-- STEP 1: Where are you going? --> <div x-show="step === 1" x-transition> <h1 class="text-2xl font-bold text-[--navy] mb-2">Where are you going?</h1> <p class="text-[--text-muted] text-[15px] mb-6">Pick your destination. You can change this later.</p> <div class="space-y-2"> <template x-for="dest in destinations" :key="dest.id"> <button @click="trip.destination = dest.id" :class="trip.destination === dest.id ? 'border-[--teal] bg-[--teal]/5' : 'border-[#e4e0d8] bg-white'" class="w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 flex items-center justify-between"> <div> <p class="font-semibold text-[15px] text-[--text] mb-0.5" x-text="dest.name"></p> <p class="text-[13px] text-[--text-muted] mb-0" x-text="dest.description"></p> </div> <div x-show="trip.destination === dest.id" class="w-6 h-6 rounded-full bg-[--teal] flex items-center justify-center flex-shrink-0 ml-3"> <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> </div> </button> </template> </div> </div> <!-- STEP 2: When are you travelling? --> <div x-show="step === 2" x-transition> <h1 class="text-2xl font-bold text-[--navy] mb-2">When are you travelling?</h1> <p class="text-[--text-muted] text-[15px] mb-6">Choose your travel dates. Approximate is fine.</p> <div class="space-y-4"> <div> <label class="text-[13px] font-semibold text-[--text] block mb-2">Departure date</label> <input type="date" x-model="trip.departDate" class="w-full px-4 py-3.5 rounded-xl border-2 border-[#e4e0d8] bg-white text-[--text] text-[15px] focus:border-[--teal] focus:outline-none transition-colors"> </div> <div> <label class="text-[13px] font-semibold text-[--text] block mb-2">Return date</label> <input type="date" x-model="trip.returnDate" class="w-full px-4 py-3.5 rounded-xl border-2 border-[#e4e0d8] bg-white text-[--text] text-[15px] focus:border-[--teal] focus:outline-none transition-colors"> </div> </div> <!-- Helper --> <div class="mt-5 bg-[--teal]/5 border border-[--teal]/20 rounded-xl p-4"> <p class="text-[13px] text-[--teal] font-medium mb-1">Not sure of exact dates?</p> <p class="text-[13px] text-[--text-muted] mb-0">That's OK — pick your best guess. You can update this at any time from the trip summary.</p> </div> </div> <!-- STEP 3: How many people? --> <div x-show="step === 3" x-transition> <h1 class="text-2xl font-bold text-[--navy] mb-2">How many travellers?</h1> <p class="text-[--text-muted] text-[15px] mb-6">Include yourself in the count.</p> <div class="space-y-4"> <div class="flex items-center justify-between bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4"> <div> <p class="font-semibold text-[15px] text-[--text] mb-0">Adults</p> <p class="text-[13px] text-[--text-muted] mb-0">13 years and over</p> </div> <div class="flex items-center gap-4"> <button @click="if(trip.adults > 1) trip.adults--" :class="trip.adults <= 1 ? 'opacity-30' : ''" class="w-9 h-9 rounded-full border-2 border-[#e4e0d8] flex items-center justify-center text-[--text] font-bold text-lg">−</button> <span class="text-lg font-semibold text-[--text] w-6 text-center" x-text="trip.adults"></span> <button @click="trip.adults++" class="w-9 h-9 rounded-full border-2 border-[--teal] text-[--teal] flex items-center justify-center font-bold text-lg">+</button> </div> </div> <div class="flex items-center justify-between bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4"> <div> <p class="font-semibold text-[15px] text-[--text] mb-0">Children</p> <p class="text-[13px] text-[--text-muted] mb-0">2–12 years</p> </div> <div class="flex items-center gap-4"> <button @click="if(trip.children > 0) trip.children--" :class="trip.children <= 0 ? 'opacity-30' : ''" class="w-9 h-9 rounded-full border-2 border-[#e4e0d8] flex items-center justify-center text-[--text] font-bold text-lg">−</button> <span class="text-lg font-semibold text-[--text] w-6 text-center" x-text="trip.children"></span> <button @click="trip.children++" class="w-9 h-9 rounded-full border-2 border-[--teal] text-[--teal] flex items-center justify-center font-bold text-lg">+</button> </div> </div> </div> </div> <!-- STEP 4: What do you need? --> <div x-show="step === 4" x-transition> <h1 class="text-2xl font-bold text-[--navy] mb-2">What do you need?</h1> <p class="text-[--text-muted] text-[15px] mb-6">Pick the services you want. You can add more later.</p> <div class="grid grid-cols-2 gap-3"> <template x-for="svc in serviceOptions" :key="svc.id"> <button @click="toggleService(svc.id)" :class="trip.services.includes(svc.id) ? 'border-[--teal] bg-[--teal]/5' : 'border-[#e4e0d8] bg-white'" class="flex flex-col items-center gap-2 py-5 px-3 rounded-xl border-2 transition-all duration-200"> <div :class="trip.services.includes(svc.id) ? 'bg-[--teal]/20 text-[--teal]' : 'bg-[#e8e4dc] text-[--text-muted]'" class="w-10 h-10 rounded-full flex items-center justify-center transition-colors"> <span x-html="svc.icon" class="w-5 h-5"></span> </div> <span :class="trip.services.includes(svc.id) ? 'text-[--teal] font-semibold' : 'text-[--text-muted]'" class="text-[13px] transition-colors" x-text="svc.label"></span> </button> </template> </div> <div class="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-4" x-show="trip.services.length === 0"> <p class="text-[13px] text-amber-700 mb-0">Select at least one service so we can help plan your trip.</p> </div> </div> <!-- STEP 5: Review your trip --> <div x-show="step === 5" x-transition> <h1 class="text-2xl font-bold text-[--navy] mb-2">Your trip summary</h1> <p class="text-[--text-muted] text-[15px] mb-6">Review everything below. Tap any item to go back and change it.</p> <div class="space-y-3"> <!-- Destination --> <button @click="step = 1" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors"> <div> <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Destination</p> <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="getDestinationName()"></p> </div> <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> </button> <!-- Dates --> <button @click="step = 2" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors"> <div> <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Dates</p> <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="formatDates()"></p> </div> <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> </button> <!-- Travellers --> <button @click="step = 3" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors"> <div> <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Travellers</p> <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="formatTravellers()"></p> </div> <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> </button> <!-- Services --> <button @click="step = 4" class="w-full text-left bg-white rounded-xl border-2 border-[#e4e0d8] px-5 py-4 flex items-center justify-between hover:border-[--teal]/50 transition-colors"> <div> <p class="text-[12px] font-semibold uppercase tracking-wider text-[--text-muted] mb-0.5">Services needed</p> <p class="font-semibold text-[15px] text-[--text] mb-0" x-text="formatServices()"></p> </div> <svg class="w-4 h-4 text-[--text-muted]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg> </button> </div> <!-- Success helper --> <div class="mt-6 bg-[--teal]/5 border border-[--teal]/20 rounded-xl p-4"> <p class="text-[13px] text-[--teal] font-medium mb-1">Everything look right?</p> <p class="text-[13px] text-[--text-muted] mb-0">Tap "Create Trip" below to save. You can always edit your trip later from the My Trip tab.</p> </div> </div> </div> <!-- Fixed bottom CTA --> <div class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#e4e0d8] px-5 py-4 z-50"> <button @click="step < 5 ? nextStep() : createTrip()" :class="canProceed() ? 'bg-[--teal] shadow-lg shadow-[--teal]/20' : 'bg-[#ccc]'" :disabled="!canProceed()" class="w-full py-4 rounded-xl text-white font-semibold text-[15px] transition-all duration-200" x-text="step < 5 ? 'Continue' : 'Create Trip'"></button> <p class="text-center text-[12px] text-[--text-muted] mt-2 mb-0" x-show="!canProceed()"> <span x-show="step === 1">Please select a destination</span> <span x-show="step === 2">Please choose at least a departure date</span> <span x-show="step === 4">Please select at least one service</span> </p> </div> <!-- Success overlay --> <div x-show="showSuccess" x-transition.opacity x-cloak class="fixed inset-0 z-[100] bg-[--navy]/90 flex items-center justify-center px-6"> <div class="bg-white rounded-2xl p-8 max-w-sm w-full text-center"> <div class="w-16 h-16 rounded-full bg-[--teal]/10 flex items-center justify-center mx-auto mb-5"> <svg class="w-8 h-8 text-[--teal]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> </div> <h2 class="text-[--navy] text-xl font-bold mb-2">Trip created!</h2> <p class="text-[--text-muted] text-[15px] mb-6">Your trip has been saved. You can view and edit it anytime.</p> <button @click="showSuccess = false; resetTrip()" class="w-full py-3.5 bg-[--teal] text-white font-semibold rounded-xl">
+Done
+</button> </div> </div> </div>   <script>
+      // Fade-in scroll observer
+      document.addEventListener('DOMContentLoaded', function() {
+        var els = document.querySelectorAll('.fade-up');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          els.forEach(function(el) { el.classList.add('visible'); });
+          return;
+        }
+        var obs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+          });
+        }, { threshold: 0.1 });
+        els.forEach(function(el) { obs.observe(el); });
+      });
+    </script> </body> </html>

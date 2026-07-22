@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SCOTS — What to Expect From Your Appointment</title><meta name="description" content="Southern Community Orthopaedic Triage Service patient guide."><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><script>
+      // Define Alpine.js component functions on window BEFORE Alpine initializes
+      window.accessibilityTools = function() {
+        return {
+          reading: false,
+          textSize: 'normal',
+          highContrast: false,
+
+          toggleReadAloud() {
+            if (this.reading) {
+              window.speechSynthesis.cancel();
+              this.reading = false;
+              this._queue = [];
+              return;
+            }
+            var main = document.getElementById('main-content');
+            if (!main) return;
+
+            // Build a queue of text chunks with pause durations
+            var queue = [];
+            var sections = main.querySelectorAll('section');
+            for (var i = 0; i < sections.length; i++) {
+              // Get direct block-level children to split content naturally
+              var blocks = sections[i].querySelectorAll('h1, h2, h3, p, li, div.bg-\\[--navy\\]');
+              if (blocks.length === 0) {
+                var text = sections[i].innerText.trim();
+                if (text) queue.push({ text: text, pause: 900 });
+              } else {
+                for (var j = 0; j < blocks.length; j++) {
+                  var el = blocks[j];
+                  // Skip elements marked as no-read, or inside a no-read parent
+                  if (el.hasAttribute('data-no-read') || el.closest('[data-no-read]')) continue;
+                  // Skip child elements inside a data-read-once parent (parent will be read instead)
+                  if (el.parentElement && el.parentElement.hasAttribute('data-read-once')) continue;
+                  var txt = el.innerText.trim();
+                  if (!txt) continue;
+
+                  // Determine pause after this chunk
+                  var pauseAfter = 400; // default short pause
+                  var tag = el.tagName.toLowerCase();
+                  if (tag === 'h1' || tag === 'h2' || tag === 'h3') pauseAfter = 700;
+                  if (tag === 'li') pauseAfter = 500;
+
+                  queue.push({ text: txt, pause: pauseAfter });
+                }
+                // Longer pause between sections
+                queue.push({ text: '', pause: 900 });
+              }
+            }
+
+            // Filter out empty text entries except for pause-only markers
+            queue = queue.filter(function(item) { return item.text.length > 0 || item.pause > 600; });
+
+            if (queue.length === 0) return;
+
+            this._queue = queue;
+            this._currentIndex = 0;
+            this.reading = true;
+            var self = this;
+
+            function speakNext() {
+              if (self._currentIndex >= self._queue.length || !self.reading) {
+                self.reading = false;
+                return;
+              }
+              var item = self._queue[self._currentIndex];
+              self._currentIndex++;
+
+              // If empty text, it's just a pause marker
+              if (!item.text) {
+                setTimeout(speakNext, item.pause);
+                return;
+              }
+
+              var utterance = new SpeechSynthesisUtterance(item.text);
+              utterance.lang = 'en-NZ';
+              utterance.rate = 0.85;
+              utterance.pitch = 1;
+              utterance.onend = function() {
+                if (self.reading) {
+                  setTimeout(speakNext, item.pause);
+                } else {
+                  self.reading = false;
+                }
+              };
+              utterance.onerror = function() {
+                self.reading = false;
+              };
+              window.speechSynthesis.speak(utterance);
+            }
+
+            speakNext();
+          },
+
+          setSize(size) {
+            this.textSize = size;
+            document.documentElement.classList.remove('text-size-large', 'text-size-xlarge');
+            if (size === 'large') document.documentElement.classList.add('text-size-large');
+            if (size === 'xlarge') document.documentElement.classList.add('text-size-xlarge');
+          },
+
+          cycleSize() {
+            if (this.textSize === 'normal') this.setSize('large');
+            else if (this.textSize === 'large') this.setSize('xlarge');
+            else this.setSize('normal');
+          },
+
+          toggleContrast() {
+            this.highContrast = !this.highContrast;
+            document.documentElement.classList.toggle('high-contrast');
+          }
+        };
+      };
+    </script><link rel="stylesheet" href="/_astro/index.DIemnMqw.css"><script type="module" src="/_astro/page.D2RhrP0O.js"></script></head> <body>   <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-[--focus] focus:text-white focus:px-5 focus:py-3 focus:rounded-lg focus:text-lg focus:font-semibold no-underline">
+Skip to main content
+</a>  <div class="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3" x-data="accessibilityTools()"> <!-- Read Aloud with tooltip --> <div class="relative group"> <span class="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-[--navy] text-white text-xs font-medium px-3 py-2 rounded-lg shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden="true" data-no-read>
+Listen to this page
+</span> <button @click="toggleReadAloud()" :class="reading ? 'bg-red-500 text-white' : 'bg-gradient-to-br from-[--navy] to-[--navy-light] text-white'" class="w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform" :aria-label="reading ? 'Stop reading aloud' : 'Listen to this page read aloud'"> <svg x-show="!reading" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg> <svg x-show="reading" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path></svg> </button> </div> <!-- Text Size Up --> <button @click="cycleSize()" class="w-12 h-12 rounded-full bg-white border-2 border-[--border] shadow-md flex items-center justify-center hover:scale-105 transition-transform text-[--navy] font-bold text-sm" aria-label="Increase text size" x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'"></button> <!-- High Contrast --> <button @click="toggleContrast()" :class="highContrast ? 'bg-yellow-400 border-yellow-500 text-black' : 'bg-white border-[--border] text-[--navy]'" class="w-12 h-12 rounded-full border-2 shadow-md flex items-center justify-center hover:scale-105 transition-transform" aria-label="Toggle high contrast mode"> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"></circle><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"></path></svg> </button> </div>  <header class="sticky top-0 z-50 bg-gradient-to-r from-[--navy] to-[--navy-mid] border-b border-white/10" x-data="{ open: false }"> <div class="max-w-[900px] mx-auto px-6 flex items-center justify-between h-16"> <a href="#" class="no-underline text-white font-bold text-xl tracking-tight flex items-center gap-2 min-h-[48px]"> <span aria-hidden="true">&#9679;</span> SCOTS
+</a> <nav class="hidden md:flex gap-4" aria-label="Main navigation"> <a href="#referral" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">Referral</a> <a href="#appointment" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">Appointment</a> <a href="#outcomes" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">After Care</a> <a href="#locations" class="no-underline text-white/70 hover:text-white font-medium px-3 py-2 rounded-lg hover:bg-white/10 transition-colors text-base">Locations</a> </nav> <button @click="open = !open" :aria-expanded="open.toString()" aria-controls="mobile-menu" class="md:hidden w-12 h-12 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors text-white" aria-label="Open menu"> <svg x-show="!open" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg> <svg x-show="open" x-cloak class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> </button> </div> <!-- Mobile menu --> <div id="mobile-menu" x-show="open" x-cloak x-transition class="md:hidden border-t border-white/10 bg-gradient-to-b from-[--navy-mid] to-[--navy] px-6 py-5 space-y-2"> <a href="#referral" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">Referral</a> <a href="#appointment" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">Appointment</a> <a href="#outcomes" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">After Care</a> <a href="#locations" @click="open=false" class="block no-underline text-lg font-medium text-white/70 py-3 px-4 rounded-lg hover:bg-white/10 hover:text-white">Locations</a> </div> </header>  <main id="main-content"> <!-- Hero --> <section class="bg-white border-b-2 border-[--border]" aria-labelledby="page-title"> <div class="max-w-[900px] mx-auto px-6 py-12 md:py-16"> <h1 id="page-title" class="text-[--navy] mb-4">What to expect from your appointment</h1> <p class="text-[--text-muted] text-lg max-w-[640px] leading-relaxed">
+This page explains why you have been referred to SCOTS, what happens during your appointment, and how to prepare.
+</p> </div> </section> <!-- Content --> <div class="max-w-[900px] mx-auto px-6"> <!-- Referral --> <section id="referral" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="referral-heading"> <h2 id="referral-heading" class="text-[--navy] mb-5">Why have I been referred?</h2> <p class="text-[--text-muted]">
+You have been referred to SCOTS to assess your musculoskeletal condition. This means problems with your <strong>joints, muscles, or soft tissues</strong>. We will work out the best next step for your care.
+</p> <p class="text-[--text] font-medium mb-3">This may include:</p> <ul class="list-none space-y-3 mb-0 pl-0" role="list"> <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5"> <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span class="text-[--text]">Advice and education</span> </li> <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5"> <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span class="text-[--text]">A structured rehabilitation plan</span> </li> <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5"> <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span class="text-[--text]">An education program</span> </li> <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5"> <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span class="text-[--text]">Referral for X-rays or scans (if needed)</span> </li> <li class="flex gap-3 items-start bg-white border border-[--border] rounded-lg px-5 py-3.5"> <svg class="w-6 h-6 text-[--teal] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> <span class="text-[--text]">Referral to a bone and joint specialist</span> </li> </ul> </section> <!-- Surgeon --> <section id="surgeon" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="surgeon-heading"> <h2 id="surgeon-heading" class="text-[--navy] mb-5">Will I see a surgeon?</h2> <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mb-5" data-read-once> <p class="text-white text-2xl font-bold mb-0">No, not at this stage.</p> </div> <p class="text-[--text-muted]">
+Your first appointment is with a <strong>Physiotherapist</strong>. They are trained to work out whether:
+</p> <ul class="list-disc pl-7 text-[--text-muted] space-y-2"> <li>Your condition can improve without surgery, or</li> <li>You would benefit from seeing a surgeon</li> </ul> <p class="text-[--text-muted]">This makes sure you get the right care at the right time.</p> </section> <!-- Why not surgeon --> <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="why-not-heading"> <h2 id="why-not-heading" class="text-[--navy] mb-5">Why not go straight to a surgeon?</h2> <p class="text-[--text-muted]">For many conditions:</p> <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5"> <li>Surgery is <strong>not the first or best treatment</strong></li> <li>Pain often improves with the right non-surgical care</li> <li>Seeing a surgeon too early may not change your outcome</li> </ul> <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6"> <p class="text-white font-bold mb-0">Our job is to make sure that if you do need surgery, the referral is appropriate and likely to help you.</p> </div> </section> <!-- Appointment --> <section id="appointment" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="appointment-heading"> <h2 id="appointment-heading" class="text-[--navy] mb-5">What will happen at my appointment?</h2> <p class="text-[--text-muted] mb-6">At your appointment, we will:</p> <ol class="list-none space-y-4 pl-0 mb-6" role="list"> <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4"> <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">1</span> <span class="text-[--text] font-medium">Listen to your concerns and goals</span> </li> <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4"> <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">2</span> <span class="text-[--text] font-medium">Assess your condition</span> </li> <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4"> <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">3</span> <span class="text-[--text] font-medium">Review any previous treatment</span> </li> <li class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4"> <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">4</span> <span class="text-[--text] font-medium">Discuss your options together</span> </li> </ol> <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6"> <p class="text-white font-bold mb-0">Together, we will agree on a clear plan forward.</p> </div> </section> <!-- Surgery & Physio --> <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="surgery-heading"> <h2 id="surgery-heading" class="text-[--navy] mb-5">What if I think I need surgery?</h2> <p class="text-[--text-muted]">
+We understand you may be hoping for a surgical opinion. During your appointment, we will explain whether surgery is likely to help you.
+</p> <p class="text-[--text-muted]">
+If surgery is right for you, we will refer you. If not, we will explain the best next steps and why.
+</p> <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mt-5"> <p class="text-white font-bold mb-0">Surgery is not ruled out — it is carefully considered at the right time.</p> </div> </section> <section class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="physio-heading"> <h2 id="physio-heading" class="text-[--navy] mb-5">What if I have already tried physiotherapy?</h2> <p class="text-[--text-muted]">That is helpful information. We will look at:</p> <ul class="list-disc pl-7 text-[--text-muted] space-y-2"> <li>What type of treatment you had</li> <li>How long you tried it for</li> <li>Whether it was the right kind for your problem</li> </ul> <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mt-5"> <p class="text-white font-bold mb-0">Sometimes a different approach can still help.</p> </div> </section> <!-- After assessment --> <section id="outcomes" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="outcomes-heading"> <h2 id="outcomes-heading" class="text-[--navy] mb-5">What happens after the assessment?</h2> <p class="text-[--text-muted] mb-5">Depending on your results, we may:</p> <ul class="list-none space-y-3 pl-0" role="list"> <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Start or adjust a rehabilitation plan</li> <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Invite you to an education program</li> <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Discharge you with advice</li> <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Refer you for X-rays or scans</li> <li class="bg-white border border-[--border] rounded-lg px-5 py-4 text-[--text]">Refer you for a surgical opinion</li> </ul> <p class="text-[--text-muted] mt-5">If treatment is recommended, we will set a clear timeframe and check on your progress.</p> </section> <!-- Prepare --> <section id="prepare" class="py-12 border-b-2 border-[--border] scroll-mt-40 fade-up" aria-labelledby="prepare-heading"> <h2 id="prepare-heading" class="text-[--navy] mb-5">How to prepare for your appointment</h2> <div class="space-y-4"> <div class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4"> <span class="w-10 h-10 rounded-full bg-[--teal-light] text-[--navy] flex items-center justify-center font-bold text-lg flex-shrink-0">A</span> <span class="text-[--text]">Bring any scan reports or letters</span> </div> <div class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4"> <span class="w-10 h-10 rounded-full bg-[--teal-light] text-[--navy] flex items-center justify-center font-bold text-lg flex-shrink-0">B</span> <span class="text-[--text]">Wear comfortable clothing</span> </div> <div class="flex gap-4 items-center bg-white border-2 border-[--border] rounded-xl px-5 py-4"> <span class="w-10 h-10 rounded-full bg-[--teal-light] text-[--navy] flex items-center justify-center font-bold text-lg flex-shrink-0">C</span> <span class="text-[--text]">Think about how your condition affects daily life</span> </div> </div> <p class="text-[--text-muted] mt-6">If you have questions, speak with your GP or the person who referred you.</p> </section> <!-- Locations --> <section id="locations" class="py-12 scroll-mt-40 fade-up" aria-labelledby="locations-heading"> <h2 id="locations-heading" class="text-[--navy] mb-6">Where to find us</h2> <div class="space-y-5"> <div class="bg-white border border-[--border] rounded-xl p-6"> <p class="font-bold text-[--navy] mb-2">Assessment Clinics</p> <p class="text-[--text] mb-1">Te Kaika Wellbeing Hub</p> <a href="https://www.google.com/maps/dir/?api=1&destination=Te+Kaika+Wellbeing+Hub+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium mb-3"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+Get directions
+</a> <p class="text-[--text] mb-1">Zingari Richmond Football Club</p> <a href="https://www.google.com/maps/dir/?api=1&destination=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+Get directions
+</a> </div> <div class="bg-white border border-[--border] rounded-xl p-6"> <p class="font-bold text-[--navy] mb-2">Rehabilitation</p> <p class="text-[--text] mb-1">Zingari Richmond Football Club Gym</p> <a href="https://www.google.com/maps/dir/?api=1&destination=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+Get directions
+</a> </div> <div class="bg-white border border-[--border] rounded-xl p-6"> <p class="font-bold text-[--navy] mb-2">Education Programs</p> <p class="text-[--text] mb-1">Nutrition Clinic — Otago University</p> <a href="https://www.google.com/maps/dir/?api=1&destination=University+of+Otago+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium mb-3"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+Get directions
+</a> <p class="text-[--text] mb-1">Chatsford Retirement Village Events Centre</p> <a href="https://www.google.com/maps/dir/?api=1&destination=Chatsford+Retirement+Village+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium"> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+Get directions
+</a> </div> </div> <p class="text-[--text-muted] mt-6">Contact details will be given to you after your appointment.</p> </section> </div> </main>  <footer class="bg-gradient-to-r from-[--navy] to-[--navy-mid] py-10 mt-8" role="contentinfo"> <div class="max-w-[900px] mx-auto px-6 text-center"> <p class="text-white font-semibold text-lg mb-2">SCOTS</p> <p class="text-white/60 mb-4">Southern Community Orthopaedic Triage Service</p> <p class="text-white/40 text-sm mb-0">&copy; 2026 Health New Zealand | Te Whatu Ora</p> </div> </footer>  <script>
+      // Fade-in scroll observer
+      document.addEventListener('DOMContentLoaded', function() {
+        var els = document.querySelectorAll('.fade-up');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          els.forEach(function(el) { el.classList.add('visible'); });
+          return;
+        }
+        var obs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+          });
+        }, { threshold: 0.1 });
+        els.forEach(function(el) { obs.observe(el); });
+      });
+    </script> </body> </html>
