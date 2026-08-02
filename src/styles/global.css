@@ -13,6 +13,7 @@
     --text-muted: #374956;
     --border: #d4d1cc;
     --focus: #e65100;
+    --surface: #f2f6f9;
     --base-size: 20px;
   }
 
@@ -38,9 +39,12 @@
     --navy-light: #000055;
     --teal: #004d3d;
     --focus: #cc0000;
+    --surface: #ffffff;
   }
   .high-contrast body { background: #fff; }
   .high-contrast a { text-decoration-thickness: 3px; }
+  /* Remove photo behind hero text so the overlay stays fully opaque */
+  .high-contrast .hero-photo { display: none; }
 
   html { scroll-behavior: smooth; }
 
@@ -89,6 +93,21 @@
 }
 
 @layer components {
+  /* Teal tick markers drawn in CSS — no extra markup, ignored by screen readers */
+  .check-list { list-style: none; padding-left: 0; }
+  .check-list > li { position: relative; padding-left: 2.1rem; }
+  .check-list > li::before {
+    content: "";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.4em;
+    width: 0.5rem;
+    height: 0.9rem;
+    border-right: 3px solid var(--teal);
+    border-bottom: 3px solid var(--teal);
+    transform: rotate(45deg);
+  }
+
   .fade-up {
     opacity: 0;
     transform: translateY(16px);

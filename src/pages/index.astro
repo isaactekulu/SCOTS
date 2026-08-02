@@ -10,7 +10,7 @@ import Layout from '../layouts/Layout.astro';
   <div id="a11y-announce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
   <header class="sticky top-0 z-50 bg-gradient-to-r from-[--navy] to-[--navy-mid] border-b border-white/10" x-data="accessibilityTools()" role="banner">
-    <div class="max-w-[900px] mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
+    <div class="max-w-[1000px] mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
       <span class="text-white font-bold text-lg sm:text-xl tracking-tight">SCOTS</span>
 
       <div class="flex items-center gap-1.5 sm:gap-2" role="toolbar" aria-label="Accessibility tools">
@@ -62,180 +62,229 @@ import Layout from '../layouts/Layout.astro';
   </header>
 
   <main id="main-content">
-    <!-- Hero -->
-    <section class="bg-white" aria-labelledby="page-title">
-      <div class="max-w-[900px] mx-auto px-6 py-12 md:py-16">
-        <h1 id="page-title" class="text-[--navy] mb-4">What to Expect From Your Appointment</h1>
-        <p class="text-[--text-muted] text-lg max-w-[640px] leading-relaxed">
-          Southern Community Orthopedic Triage Service (SCOTS). This page explains why you have been referred, what happens during your appointment, and how to prepare.
-        </p>
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate overflow-hidden" aria-labelledby="site-title">
+      <img
+        src="/images/assessment.jpg"
+        alt=""
+        aria-hidden="true"
+        class="hero-photo absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-br from-[--navy] via-[--navy]/95 to-[--navy-mid]/90"></div>
+
+      <div class="relative max-w-[820px] mx-auto px-6 py-16 sm:py-20 md:py-24 text-center">
+        <h1 id="site-title" class="text-white font-bold leading-tight mb-3">
+          Southern Community Orthopedic Triage Service
+          <span class="block text-[#5ce1e6] mt-2">(SCOTS)</span>
+        </h1>
+
+        <span class="block w-16 h-1 bg-[#5ce1e6] rounded-full mx-auto my-7" aria-hidden="true"></span>
+
+
       </div>
     </section>
 
-    <div class="max-w-[900px] mx-auto px-6">
+    <!-- ============ PAGE 1 CONTENT ============ -->
+    <div class="bg-[--surface]">
+      <div class="max-w-[1000px] mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-8">
 
-      <!-- Why have I been referred? -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="referral-heading">
-        <h2 id="referral-heading" class="text-[--navy] mb-5">Why have I been referred?</h2>
-        <p class="text-[--text-muted]">
-          You have been referred to SCOTS Orthopaedic Outpatient Services to assess your musculoskeletal condition (e.g. concerns with your joints, muscles, other soft tissues) and determine the best pathway for you.
-        </p>
-        <p class="font-medium mb-3">This may include:</p>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2">
-          <li>Advice and education</li>
-          <li>A structured rehabilitation plan</li>
-          <li>An education program</li>
-          <li>Referral to further services (if needed)</li>
-        </ul>
-      </section>
+        <h2 class="text-[--navy] text-center font-bold text-2xl sm:text-3xl mb-2">What to Expect From Your Appointment</h2>
+        <p class="text-[--text-muted] text-center mb-4">This page explains why you have been referred, what happens during your appointment, and how to prepare.</p>
 
-      <!-- What will happen at my appointment? -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="appointment-heading">
-        <h2 id="appointment-heading" class="text-[--navy] mb-5">What will happen at my appointment?</h2>
-        <p class="text-[--text-muted] mb-5">We will:</p>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
-          <li>Listen to your concerns and goals</li>
-          <li>Assess your condition</li>
-          <li>Review any previous treatment</li>
-          <li>Discuss your diagnosis and options</li>
-        </ul>
-        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6">
-          <p class="text-white font-bold mb-0">Together, we will agree on a clear plan forward.</p>
-        </div>
-      </section>
+        <!-- Why have I been referred? -->
+        <section class="fade-up bg-white border border-[--border] rounded-2xl shadow-sm p-6 sm:p-8" aria-labelledby="referral-heading">
+          <h3 id="referral-heading" class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-5">
+            WHY HAVE I BEEN REFERRED?
+          </h3>
+          <p class="text-[--text-muted]">
+            You have been referred to SCOTS Orthopaedic Outpatient Services to assess your musculoskeletal condition (e.g concerns with your joints, muscles, other soft tissues) and determine the best pathway for you.
+          </p>
+          <p class="font-semibold text-[--navy] mb-3">This may include:</p>
+          <ul class="check-list text-[--text-muted] space-y-2.5 mb-0" role="list">
+            <li>Advice and education</li>
+            <li>A structured rehabilitation plan</li>
+            <li>An education program</li>
+            <li>Referral to further services (if needed)</li>
+          </ul>
+        </section>
 
-      <!-- What if I have already trialed physiotherapy? -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="physio-heading">
-        <h2 id="physio-heading" class="text-[--navy] mb-5">What if I have already trialed physiotherapy?</h2>
-        <p class="text-[--text-muted]">That is helpful information. We will look at:</p>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
-          <li>What type of treatment you have had</li>
-          <li>How long you tried it for</li>
-          <li>Whether it was targeted and progressive</li>
-          <li>Whether it was specifically tailored to your problem</li>
-        </ul>
-        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6">
-          <p class="text-white font-bold mb-0">Sometimes a more structured approach can still lead to improvement.</p>
-        </div>
-      </section>
+        <!-- What will happen at my appointment? -->
+        <section class="fade-up bg-white border border-[--border] rounded-2xl shadow-sm p-6 sm:p-8" aria-labelledby="appointment-heading">
+          <h3 id="appointment-heading" class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-5">
+            WHAT WILL HAPPEN AT MY APPOINTMENT?
+          </h3>
+          <p class="font-semibold text-[--navy] mb-3">We will:</p>
+          <ul class="check-list text-[--text-muted] space-y-2.5 mb-0" role="list">
+            <li>Listen to your concerns and goals</li>
+            <li>Assess your condition</li>
+            <li>Review any previous treatment</li>
+            <li>Discuss your diagnosis and options</li>
+          </ul>
+          <p class="mt-6 mb-0 bg-[--teal-light] border-l-[5px] border-[--teal] rounded-r-lg px-5 py-4 font-semibold text-[--navy]">
+            Together, we will agree on a clear plan forward.
+          </p>
+        </section>
 
-      <!-- What happens after the assessment? -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="outcomes-heading">
-        <h2 id="outcomes-heading" class="text-[--navy] mb-5">What happens after the assessment?</h2>
-        <p class="text-[--text-muted] mb-5">Depending on your assessment, we may:</p>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
-          <li>Start or adjust a rehabilitation plan</li>
-          <li>Invite you to an education program</li>
-          <li>Discharge you with advice</li>
-          <li>Refer you for further investigations</li>
-          <li>Refer you for a surgical opinion</li>
-        </ul>
-        <p class="text-[--text-muted]">If a trial of treatment is recommended, we will set a clear timeframe and review your progress.</p>
-      </section>
+        <!-- What if I have already trialed physiotherapy? -->
+        <section class="fade-up bg-white border border-[--border] rounded-2xl shadow-sm p-6 sm:p-8" aria-labelledby="physio-heading">
+          <h3 id="physio-heading" class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-5">
+            WHAT IF I HAVE ALREADY TRIALED PHYSIOTHERAPY?
+          </h3>
+          <p class="text-[--text-muted] mb-2">That is helpful information.</p>
+          <p class="font-semibold text-[--navy] mb-3">We will look at:</p>
+          <ul class="check-list text-[--text-muted] space-y-2.5 mb-0" role="list">
+            <li>What type of treatment you have had</li>
+            <li>How long you tried it for</li>
+            <li>Whether it was targeted and progressive</li>
+            <li>Whether it was specifically tailored to your problem</li>
+          </ul>
+          <p class="mt-6 mb-0 bg-[--teal-light] border-l-[5px] border-[--teal] rounded-r-lg px-5 py-4 font-semibold text-[--navy]">
+            Sometimes a more structured approach can still lead to improvement.
+          </p>
+        </section>
 
-      <!-- Our Objectives -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="objectives-heading">
-        <h2 id="objectives-heading" class="text-[--navy] mb-5">Our Objectives</h2>
-        <ol class="list-none space-y-4 pl-0" role="list">
-          <li class="flex gap-4 items-start bg-white border-2 border-[--border] rounded-xl px-5 py-4">
-            <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">1</span>
-            <span>To make sure you receive the right treatment, at the right time, for the best possible outcome.</span>
-          </li>
-          <li class="flex gap-4 items-start bg-white border-2 border-[--border] rounded-xl px-5 py-4">
-            <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">2</span>
-            <span>Ensure you have access to a comprehensive trial of rehabilitation and education programs to consider their effectiveness.</span>
-          </li>
-          <li class="flex gap-4 items-start bg-white border-2 border-[--border] rounded-xl px-5 py-4">
-            <span class="w-10 h-10 rounded-full bg-[--teal] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">3</span>
-            <span>Support you by providing strategies you can use to manage your condition by yourself where appropriate.</span>
-          </li>
-        </ol>
-      </section>
+        <!-- What happens after the assessment? -->
+        <section class="fade-up bg-white border border-[--border] rounded-2xl shadow-sm p-6 sm:p-8" aria-labelledby="outcomes-heading">
+          <h3 id="outcomes-heading" class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-5">
+            WHAT HAPPENS AFTER THE ASSESSMENT?
+          </h3>
+          <p class="font-semibold text-[--navy] mb-3">Depending on your assessment, we may:</p>
+          <ul class="check-list text-[--text-muted] space-y-2.5 mb-0" role="list">
+            <li>Start or adjust a rehabilitation plan</li>
+            <li>Invite you to an education program</li>
+            <li>Discharge you with advice</li>
+            <li>Refer you for further investigations</li>
+            <li>Refer you for a surgical opinion</li>
+          </ul>
+          <p class="mt-6 mb-0 bg-[--teal-light] border-l-[5px] border-[--teal] rounded-r-lg px-5 py-4 font-semibold text-[--navy]">
+            If a trial of treatment is recommended, we will set a clear timeframe and review your progress.
+          </p>
+        </section>
 
-      <!-- How to prepare -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="prepare-heading">
-        <h2 id="prepare-heading" class="text-[--navy] mb-5">How you can prepare for the assessment</h2>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
-          <li>Bring any relevant scan reports or letters</li>
-          <li>Wear comfortable clothing for assessment</li>
-          <li>Be ready to discuss how your condition affects your daily life</li>
-        </ul>
-        <p class="text-[--text-muted]">If you have any questions before seeing us, please speak with your GP or the referring clinician.</p>
-        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mt-5">
-          <p class="text-white font-bold mb-0">We look forward to supporting you. — SCOTS Team.</p>
-        </div>
-      </section>
+        <!-- Our objectives -->
+        <section class="fade-up bg-white border border-[--border] rounded-2xl shadow-sm p-6 sm:p-8" aria-labelledby="objectives-heading">
+          <h3 id="objectives-heading" class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-5">
+            OUR OBJECTIVES:
+          </h3>
+          <ol class="text-[--text-muted] space-y-4 list-none pl-0 mb-0" role="list">
+            <li class="flex gap-3">
+              <span class="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-full bg-[--teal] text-white font-bold text-sm">1</span>
+              <span>To make sure you receive the right treatment, at the right time, for the best possible outcome.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-full bg-[--teal] text-white font-bold text-sm">2</span>
+              <span>Ensure you have access to a comprehensive trial of rehabilitation and education programs to consider their effectiveness.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-full bg-[--teal] text-white font-bold text-sm">3</span>
+              <span>Support you by providing strategies you can use to manage your condition by yourself where appropriate.</span>
+            </li>
+          </ol>
+        </section>
 
-      <!-- About Us -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="about-heading">
-        <h2 id="about-heading" class="text-[--navy] mb-5">About Us</h2>
-        <p class="text-[--text-muted]">
-          SCOTS is part of the Orthopaedic Outpatient Department Services and is designed to help patients with musculoskeletal conditions access the right care, at the right time, in the right place. We provide assessment and guidance for people experiencing these problems, ensuring that treatment pathways are clear, appropriate, and effective.
-        </p>
-        <h3 class="text-[--navy] mt-6 mb-3">Our Role</h3>
-        <p class="text-[--text-muted]">
-          SCOTS provides assessment to determine the most appropriate pathway for you. We work closely with GPs, community providers, and Orthopaedic teams to determine whether a patient is best managed with:
-        </p>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
-          <li>Targeted non-surgical treatment</li>
-          <li>Further investigation</li>
-          <li>Or referral for orthopaedic (surgical) opinion</li>
-        </ul>
-        <h3 class="text-[--navy] mt-6 mb-3">Why SCOTS Exists</h3>
-        <p class="text-[--text-muted]">
-          Clinical practice guidelines indicate that the gold standard of management for many musculoskeletal/orthopedic conditions (including Osteoarthritis) is a comprehensive targeted, and time appropriate trial of non-surgical strategies. SCOTS ensures you have access to these strategies and can trial them appropriately for your condition.
-        </p>
-      </section>
+        <!-- How you can prepare -->
+        <section class="fade-up bg-white border border-[--border] rounded-2xl shadow-sm p-6 sm:p-8" aria-labelledby="prepare-heading">
+          <h3 id="prepare-heading" class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-5">
+            HOW YOU CAN PREPARE FOR THE ASSESSMENT?
+          </h3>
+          <ul class="check-list text-[--text-muted] space-y-2.5 mb-0" role="list">
+            <li>Bring any relevant scan reports or letters</li>
+            <li>Wear comfortable clothing for assessment</li>
+            <li>Be ready to discuss how your condition affects your daily life</li>
+          </ul>
+        </section>
 
-      <!-- Locations -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="locations-heading">
-        <h2 id="locations-heading" class="text-[--navy] mb-6">Our Service Locations</h2>
-        <div class="space-y-5">
-          <div class="bg-white border border-[--border] rounded-xl p-6">
-            <p class="font-bold text-[--navy] mb-2">Assessment Clinics</p>
-            <p class="mb-1">Te Kaika Wellbeing Hub</p>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=Te+Kaika+Wellbeing+Hub+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium mb-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions<span class="sr-only"> (opens in new tab)</span>
-            </a>
-            <p class="mb-1">Zingari Richmond Football Club</p>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions<span class="sr-only"> (opens in new tab)</span>
-            </a>
+        <!-- Closing message -->
+        <section class="fade-up bg-white border border-[--border] rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-6 sm:p-8">
+            <p class="text-[--text-muted] mb-4">If you have any questions before seeing us, please speak with your GP or the referring clinician.</p>
+            <p class="font-semibold text-[--navy] mb-0">We look forward to supporting you. - SCOTS Team.</p>
           </div>
-          <div class="bg-white border border-[--border] rounded-xl p-6">
-            <p class="font-bold text-[--navy] mb-2">Rehab Program Sites</p>
-            <p class="mb-1">Zingari Richmond Football Club Gym</p>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions<span class="sr-only"> (opens in new tab)</span>
-            </a>
+          <img src="/images/support.jpg" alt="People supporting each other, representing teamwork and care" class="w-full h-[200px] sm:h-[260px] object-cover" />
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ============ ABOUT US ============ -->
+    <section aria-labelledby="about-heading">
+      <div class="max-w-[1000px] mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <h2 id="about-heading" class="text-[--teal] text-center font-bold mb-10">About Us</h2>
+
+        <div class="space-y-10 fade-up">
+          <div>
+            <h3 class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-2">Who we are:</h3>
+            <p class="text-[--text-muted] mb-0">
+              SCOTS as a service is part of the Orthopaedic Outpatient Department Services and is designed to help patients with musculoskeletal conditions access the right care, at the right time, in the right place. We provide assessment and guidance for people experiencing these problems, ensuring that treatment pathways are clear, appropriate, and effective.
+            </p>
           </div>
-          <div class="bg-white border border-[--border] rounded-xl p-6">
-            <p class="font-bold text-[--navy] mb-2">Education Program Sites</p>
-            <p class="mb-1">Nutrition Clinic — Otago University</p>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=University+of+Otago+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium mb-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions<span class="sr-only"> (opens in new tab)</span>
-            </a>
-            <p class="mb-1">Chatsford Retirement Village Events Centre</p>
-            <a href="https://www.google.com/maps/dir/?api=1&destination=Chatsford+Retirement+Village+Dunedin" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-[--teal] text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              Get directions<span class="sr-only"> (opens in new tab)</span>
-            </a>
+
+          <div>
+            <h3 class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-2">Our Role:</h3>
+            <p class="text-[--text-muted] mb-2">SCOTS provides assessment to determine the most appropriate pathway for you.</p>
+            <p class="text-[--text-muted] mb-4">We work closely with GPs, community providers, and Orthopaedic teams to determine whether a patient is best managed with:</p>
+            <ul class="check-list text-[--text-muted] space-y-2.5 mb-0" role="list">
+              <li>Targeted non-surgical treatment</li>
+              <li>Further investigation</li>
+              <li>Or referral for orthopaedic (surgical) opinion</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-[--teal] font-bold border-l-4 border-[--teal] pl-4 mb-2">Why SCOTS Exists:</h3>
+            <p class="text-[--text-muted] mb-0">
+              Clinical practice guidelines indicate that the gold standard of management for many musculoskeletal/orthopedic conditions (including Osteoarthritis) is a comprehensive targeted, and time appropriate trial of non surgical strategies. SCOTS ensures you have access to these strategies and can trial them appropriately for your condition.
+            </p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ SERVICE LOCATIONS ============ -->
+    <div class="bg-[--surface] py-14 sm:py-20">
+      <div class="max-w-[1000px] mx-auto px-4 sm:px-6">
+        <section class="fade-up" aria-labelledby="locations-heading">
+          <h2 id="locations-heading" class="text-[--teal] text-center font-bold mb-10">Our Service Locations:</h2>
+
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="bg-white border border-[--border] rounded-2xl shadow-sm p-6">
+              <h3 class="text-[--navy] font-bold border-l-4 border-[--teal] pl-4 mb-4">Assessment Clinics</h3>
+              <ul class="text-[--text-muted] space-y-2 list-disc pl-5 mb-0">
+                <li><a href="https://www.google.com/maps/search/?api=1&query=Te+Kaika+Wellbeing+Hub+Dunedin" target="_blank" rel="noopener noreferrer" class="text-[--text-muted] hover:text-[--teal] hover:underline">Te Kaika Wellbeing Hub<span class="sr-only"> (opens in Google Maps)</span></a></li>
+                <li><a href="https://www.google.com/maps/search/?api=1&query=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="text-[--text-muted] hover:text-[--teal] hover:underline">Zingari Richmond Football Club<span class="sr-only"> (opens in Google Maps)</span></a></li>
+              </ul>
+            </div>
+
+            <div class="bg-white border border-[--border] rounded-2xl shadow-sm p-6">
+              <h3 class="text-[--navy] font-bold border-l-4 border-[--teal] pl-4 mb-4">Rehab Program Sites</h3>
+              <ul class="text-[--text-muted] space-y-2 list-disc pl-5 mb-0">
+                <li><a href="https://www.google.com/maps/search/?api=1&query=Zingari+Richmond+Football+Club+Dunedin" target="_blank" rel="noopener noreferrer" class="text-[--text-muted] hover:text-[--teal] hover:underline">Zingari Richmond Football Club Gym<span class="sr-only"> (opens in Google Maps)</span></a></li>
+              </ul>
+            </div>
+
+            <div class="bg-white border border-[--border] rounded-2xl shadow-sm p-6">
+              <h3 class="text-[--navy] font-bold border-l-4 border-[--teal] pl-4 mb-4">Education Program Sites</h3>
+              <ul class="text-[--text-muted] space-y-2 list-disc pl-5 mb-0">
+                <li><a href="https://www.google.com/maps/search/?api=1&query=University+of+Otago+Dunedin" target="_blank" rel="noopener noreferrer" class="text-[--text-muted] hover:text-[--teal] hover:underline">Nutrition Clinic - Otago University<span class="sr-only"> (opens in Google Maps)</span></a></li>
+                <li><a href="https://maps.app.goo.gl/MMpk3WzWC6k67nqj6" target="_blank" rel="noopener noreferrer" class="text-[--text-muted] hover:text-[--teal] hover:underline">Chatsford Retirement Village Events Centre<span class="sr-only"> (opens in Google Maps)</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ============ CONTACT ============ -->
+    <div class="max-w-[1000px] mx-auto px-4 sm:px-6 py-14 sm:py-20">
+      <section class="fade-up mb-14" aria-labelledby="contact-heading">
+        <h2 id="contact-heading" class="text-[--teal] text-center font-bold mb-4">Contact us:</h2>
+        <p class="text-[--text-muted] text-center mb-0">Contact details will be made available after your first appointment with us.</p>
       </section>
 
-      <!-- Contact & Resources -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="contact-heading">
-        <h2 id="contact-heading" class="text-[--navy] mb-5">Contact Us</h2>
-        <p class="text-[--text-muted] mb-8">Contact details will be made available after your appointment with us.</p>
-
-        <h3 class="text-[--navy] mb-4">Helpful Resources and Links</h3>
-        <p class="text-[--text-muted]">
-          Arthritis New Zealand: <a href="https://www.arthritis.org.nz/" target="_blank" rel="noopener noreferrer">www.arthritis.org.nz<span class="sr-only"> (opens in new tab)</span></a>
+      <section class="fade-up" aria-labelledby="links-heading">
+        <h2 id="links-heading" class="text-[--teal] text-center font-bold mb-4">Helpful Links:</h2>
+        <p class="text-[--text-muted] text-center mb-0 break-words">
+          Arthritis New Zealand: <a href="https://www.arthritis.org.nz/" target="_blank" rel="noopener noreferrer" class="text-[--teal] hover:underline">https://www.arthritis.org.nz/<span class="sr-only"> (opens in new tab)</span></a>
         </p>
       </section>
     </div>
