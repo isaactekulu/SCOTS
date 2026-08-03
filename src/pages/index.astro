@@ -10,77 +10,117 @@ import Layout from '../layouts/Layout.astro';
   <div id="a11y-announce" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
   <header class="sticky top-0 z-50 bg-gradient-to-r from-[--navy] to-[--navy-mid] border-b border-white/10" x-data="accessibilityTools()" role="banner">
-    <div class="max-w-[900px] mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
-      <span class="text-white font-bold text-lg sm:text-xl tracking-tight">SCOTS</span>
+    <div class="max-w-[900px] md:max-w-none mx-auto px-4 sm:px-6 md:px-12 lg:px-20">
+      <!-- Top row: title + desktop tools -->
+      <div class="flex items-center justify-between h-14 sm:h-16">
+        <span class="text-white font-bold text-[1.05rem] sm:text-lg md:text-xl tracking-tight leading-tight w-full text-center md:text-left">
+          Southern Community Orthopaedic Triage Service <span class="text-[#5ce1e6]">(SCOTS)</span>
+        </span>
 
-      <div class="flex items-center gap-1.5 sm:gap-2" role="toolbar" aria-label="Accessibility tools">
-        <button
-          @click="toggleReadAloud()"
-          :class="reading ? 'bg-red-500' : 'bg-white/10 hover:bg-white/20'"
-          class="px-2.5 sm:px-3 rounded-lg text-xs sm:text-sm font-medium text-white whitespace-nowrap min-h-[44px] flex items-center"
-          aria-label="Read this page aloud"
-          :aria-label="reading ? 'Stop reading' : 'Read this page aloud'"
-          :aria-pressed="reading.toString()"
-          x-text="reading ? 'Stop' : 'Read aloud'"
-        >Read aloud</button>
+        <!-- Desktop: always visible -->
+        <div class="hidden md:flex items-center gap-2" role="toolbar" aria-label="Accessibility tools">
+          <button
+            @click="toggleReadAloud()"
+            :class="reading ? 'bg-red-500' : 'bg-white/10 hover:bg-white/20'"
+            class="px-3 rounded-lg text-sm font-medium text-white whitespace-nowrap min-h-[44px] flex items-center"
+            aria-label="Read this page aloud"
+            :aria-label="reading ? 'Stop reading' : 'Read this page aloud'"
+            :aria-pressed="reading.toString()"
+            x-text="reading ? 'Stop' : 'Read aloud'"
+          >Read aloud</button>
 
-        <span class="w-px h-6 bg-white/20 mx-0.5 sm:mx-1" aria-hidden="true"></span>
+          <span class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></span>
 
-        <button
-          @click="cycleSize()"
-          class="flex flex-col items-center justify-center w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white"
-          aria-label="Change text size"
-          :aria-label="'Change text size, currently ' + textSize"
-        >
-          <span class="font-bold text-sm leading-none" x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'">A</span>
-          <span class="text-[9px] text-white/60 leading-none mt-0.5">Size</span>
-        </button>
+          <button
+            @click="cycleSize()"
+            class="flex flex-col items-center justify-center w-11 h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white"
+            aria-label="Change text size"
+            :aria-label="'Change text size, currently ' + textSize"
+          >
+            <span class="font-bold text-sm leading-none" x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'">A</span>
+            <span class="text-[9px] text-white/60 leading-none mt-0.5">Size</span>
+          </button>
 
-        <button
-          @click="toggleContrast()"
-          :class="highContrast ? 'bg-yellow-400 text-black' : 'bg-white/10 hover:bg-white/20 text-white'"
-          class="flex flex-col items-center justify-center w-11 h-11 rounded-lg"
-          aria-label="Toggle high contrast"
-          :aria-pressed="highContrast.toString()"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
-          <span class="text-[9px] opacity-60 leading-none mt-0.5" x-text="highContrast ? 'On' : 'Contrast'">Contrast</span>
-        </button>
+          <button
+            @click="toggleContrast()"
+            :class="highContrast ? 'bg-yellow-400 text-black' : 'bg-white/10 hover:bg-white/20 text-white'"
+            class="flex flex-col items-center justify-center w-11 h-11 rounded-lg"
+            aria-label="Toggle high contrast"
+            :aria-pressed="highContrast.toString()"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
+            <span class="text-[9px] opacity-60 leading-none mt-0.5" x-text="highContrast ? 'On' : 'Contrast'">Contrast</span>
+          </button>
 
-        <button
-          @click="toggleColorBlind()"
-          :class="colorBlind ? 'bg-orange-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'"
-          class="flex flex-col items-center justify-center w-11 h-11 rounded-lg"
-          aria-label="Toggle color blind mode"
-          :aria-pressed="colorBlind.toString()"
-        >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-          <span class="text-[9px] opacity-60 leading-none mt-0.5" x-text="colorBlind ? 'On' : 'Vision'">Vision</span>
-        </button>
+          <button
+            @click="toggleColorBlind()"
+            :class="colorBlind ? 'bg-orange-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'"
+            class="flex flex-col items-center justify-center w-11 h-11 rounded-lg"
+            aria-label="Toggle color blind mode"
+            :aria-pressed="colorBlind.toString()"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            <span class="text-[9px] opacity-60 leading-none mt-0.5" x-text="colorBlind ? 'On' : 'Vision'">Vision</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile: always visible accessibility bar below title -->
+      <div class="md:hidden border-t border-white/10 py-2 -mx-4 px-4 bg-[#001a2e]">
+        <div class="flex items-center justify-center gap-2" role="toolbar" aria-label="Accessibility tools">
+          <button
+            @click="toggleReadAloud()"
+            :class="reading ? 'bg-red-500' : 'bg-white/10 hover:bg-white/20'"
+            class="px-3 rounded-lg text-xs font-medium text-white whitespace-nowrap min-h-[40px] flex items-center"
+            :aria-pressed="reading.toString()"
+            x-text="reading ? 'Stop' : 'Read aloud'"
+          >Read aloud</button>
+
+          <button
+            @click="cycleSize()"
+            class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 text-white"
+            aria-label="Change text size"
+          >
+            <span class="font-bold text-sm" x-text="textSize === 'normal' ? 'A' : textSize === 'large' ? 'A+' : 'A++'">A</span>
+          </button>
+
+          <button
+            @click="toggleContrast()"
+            :class="highContrast ? 'bg-yellow-400 text-black' : 'bg-white/10 hover:bg-white/20 text-white'"
+            class="flex items-center justify-center w-10 h-10 rounded-lg"
+            aria-label="Toggle high contrast"
+            :aria-pressed="highContrast.toString()"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 3v18a9 9 0 000-18z" fill="currentColor"/></svg>
+          </button>
+
+          <button
+            @click="toggleColorBlind()"
+            :class="colorBlind ? 'bg-orange-500 text-white' : 'bg-white/10 hover:bg-white/20 text-white'"
+            class="flex items-center justify-center w-10 h-10 rounded-lg"
+            aria-label="Toggle color blind mode"
+            :aria-pressed="colorBlind.toString()"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </button>
+        </div>
       </div>
     </div>
   </header>
 
   <main id="main-content">
-    <!-- Hero -->
-    <section class="sticky top-14 z-40 md:relative md:top-auto md:z-auto relative isolate overflow-hidden shadow-md md:shadow-none" aria-labelledby="page-title">
-      <img
-        src="/images/Cover_photo.png"
-        alt=""
-        aria-hidden="true"
-        class="absolute inset-0 w-full h-full object-cover"
-      />
-      <div class="absolute inset-0 bg-gradient-to-br from-[#00263eef] via-[#00263ed9] to-[#003a5ccc]"></div>
 
-      <div class="relative max-w-[820px] mx-auto px-4 py-3 sm:py-14 md:py-20 text-center">
-        <h1 id="page-title" class="text-white font-bold leading-snug mb-0 !text-[0.9rem] sm:!text-[2rem] md:!text-[2.5rem]">
-          Southern Community Orthopedic Triage Service <span class="text-[#5ce1e6] sm:block sm:mt-2 inline">(SCOTS)</span>
-        </h1>
-      </div>
-    </section>
-    </section>
+    <div class="max-w-[900px] md:max-w-none mx-auto px-6 md:px-12 lg:px-20">
 
-    <div class="max-w-[900px] mx-auto px-6">
+      <!-- Intro + PDF option -->
+      <section class="pt-10 pb-6 fade-up">
+        <h2 class="text-[--navy] mb-3">What to Expect From Your Appointment</h2>
+        <p class="text-[--text-muted] mb-4">This information explains why you have been referred, what happens during your appointment, and how to prepare. You can read it below or download the PDF version.</p>
+        <a href="/Pdf/SCOTS-Information-Sheet.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-[--navy] text-white font-medium text-sm px-5 py-3 rounded-lg hover:bg-[#5ce1e6] hover:text-[--navy] focus:outline-none focus:ring-2 focus:ring-[--focus] focus:ring-offset-2 transition-colors underline-offset-2 hover:underline">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Download PDF version<span class="sr-only"> — SCOTS Information Sheet (opens in new tab)</span>
+        </a>
+      </section>
 
       <!-- Why have I been referred? -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="referral-heading">
@@ -169,7 +209,7 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- ============ SECONDARY CONTENT ============ -->
     <div class="bg-[#f5f7f9]">
-      <div class="max-w-[900px] mx-auto px-6">
+      <div class="max-w-[900px] md:max-w-none mx-auto px-6 md:px-12 lg:px-20">
 
       <!-- About Us -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="about-heading">
@@ -188,7 +228,7 @@ import Layout from '../layouts/Layout.astro';
         </ul>
         <h3 class="text-[--navy] mt-6 mb-3">Why SCOTS Exists</h3>
         <p class="text-[--text-muted]">
-          Clinical practice guidelines indicate that the gold standard of management for many musculoskeletal/orthopedic conditions (including Osteoarthritis) is a comprehensive targeted, and time appropriate trial of non-surgical strategies. SCOTS ensures you have access to these strategies and can trial them appropriately for your condition.
+          Clinical practice guidelines indicate that the gold standard of management for many musculoskeletal/orthopaedic conditions (including Osteoarthritis) is a comprehensive targeted, and time appropriate trial of non-surgical strategies. SCOTS ensures you have access to these strategies and can trial them appropriately for your condition.
         </p>
       </section>
 
