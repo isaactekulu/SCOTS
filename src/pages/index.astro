@@ -63,12 +63,22 @@ import Layout from '../layouts/Layout.astro';
 
   <main id="main-content">
     <!-- Hero -->
-    <section class="bg-white" aria-labelledby="page-title">
-      <div class="max-w-[900px] mx-auto px-6 py-12 md:py-16">
-        <h1 id="page-title" class="text-[--navy] mb-4">What to Expect From Your Appointment</h1>
-        <p class="text-[--text-muted] text-lg max-w-[640px] leading-relaxed">
-          Southern Community Orthopedic Triage Service (SCOTS). This page explains why you have been referred, what happens during your appointment, and how to prepare.
-        </p>
+    <section class="relative isolate overflow-hidden" aria-labelledby="page-title">
+      <img
+        src="/images/Cover_photo.png"
+        alt=""
+        aria-hidden="true"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-[rgba(0,38,62,0.85)]"></div>
+
+      <div class="relative max-w-[820px] mx-auto px-6 py-16 sm:py-20 md:py-24 text-center">
+        <h1 id="page-title" class="text-white font-bold leading-tight mb-0">
+          Southern Community Orthopedic Triage Service
+          <span class="block text-[#5ce1e6] mt-2">(SCOTS)</span>
+        </h1>
+
+        <span class="block w-16 h-1 bg-[#5ce1e6] rounded-full mx-auto mt-7" aria-hidden="true"></span>
       </div>
     </section>
 
