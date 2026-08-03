@@ -63,7 +63,7 @@ import Layout from '../layouts/Layout.astro';
 
   <main id="main-content">
     <!-- Hero -->
-    <section class="relative isolate overflow-hidden" aria-labelledby="page-title">
+    <section class="sticky top-14 z-40 md:relative md:top-auto md:z-auto relative isolate overflow-hidden shadow-md md:shadow-none" aria-labelledby="page-title">
       <img
         src="/images/Cover_photo.png"
         alt=""
@@ -72,12 +72,12 @@ import Layout from '../layouts/Layout.astro';
       />
       <div class="absolute inset-0 bg-gradient-to-br from-[#00263eef] via-[#00263ed9] to-[#003a5ccc]"></div>
 
-      <div class="relative max-w-[820px] mx-auto px-6 py-6 sm:py-14 md:py-20 text-center">
-        <h1 id="page-title" class="text-white font-bold leading-tight mb-0 !text-[1.25rem] sm:!text-[2rem] md:!text-[2.5rem]">
-          Southern Community Orthopedic Triage Service
-          <span class="block text-[#5ce1e6] mt-1 sm:mt-2">(SCOTS)</span>
+      <div class="relative max-w-[820px] mx-auto px-4 py-3 sm:py-14 md:py-20 text-center">
+        <h1 id="page-title" class="text-white font-bold leading-snug mb-0 !text-[0.9rem] sm:!text-[2rem] md:!text-[2.5rem]">
+          Southern Community Orthopedic Triage Service <span class="text-[#5ce1e6] sm:block sm:mt-2 inline">(SCOTS)</span>
         </h1>
       </div>
+    </section>
     </section>
 
     <div class="max-w-[900px] mx-auto px-6">
@@ -165,6 +165,12 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </section>
 
+    </div>
+
+    <!-- ============ SECONDARY CONTENT ============ -->
+    <div class="bg-[#f5f7f9]">
+      <div class="max-w-[900px] mx-auto px-6">
+
       <!-- About Us -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="about-heading">
         <h2 id="about-heading" class="text-[--navy] mb-5">About Us</h2>
@@ -232,11 +238,12 @@ import Layout from '../layouts/Layout.astro';
         <h2 id="contact-heading" class="text-[--navy] mb-5">Contact Us</h2>
         <p class="text-[--text-muted] mb-8">Contact details will be made available after your appointment with us.</p>
 
-        <h3 class="text-[--navy] mb-4">Helpful Resources and Links</h3>
+        <h2 class="text-[--navy] mb-4">Helpful Resources and Links</h2>
         <p class="text-[--text-muted]">
           Arthritis New Zealand: <a href="https://www.arthritis.org.nz/" target="_blank" rel="noopener noreferrer">www.arthritis.org.nz<span class="sr-only"> (opens in new tab)</span></a>
         </p>
       </section>
+      </div>
     </div>
   </main>
 </Layout>
