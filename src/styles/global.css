@@ -42,7 +42,7 @@
   .high-contrast body { background: #fff; }
   .high-contrast a { text-decoration-thickness: 3px; }
 
-  html { scroll-behavior: smooth; overflow-x: hidden; }
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
