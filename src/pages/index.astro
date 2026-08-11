@@ -66,7 +66,7 @@ import Layout from '../layouts/Layout.astro';
       </div>
 
       <!-- Mobile: always visible accessibility bar below title -->
-      <div class="md:hidden border-t border-white/10 py-2 -mx-4 px-4 bg-[#001a2e]">
+      <div class="md:hidden border-t border-white/10 py-2 -mx-4 px-4 bg-[#0a3550]">
         <div class="flex items-center justify-center gap-2" role="toolbar" aria-label="Accessibility tools">
           <button
             @click="toggleReadAloud()"
@@ -113,33 +113,46 @@ import Layout from '../layouts/Layout.astro';
     <div class="max-w-[900px] md:max-w-none mx-auto px-6 md:px-12 lg:px-20">
 
       <!-- Intro + PDF option -->
-      <section class="pt-10 pb-6 fade-up">
-        <h2 class="text-[--navy] mb-3">What to Expect From Your Appointment</h2>
-        <p class="text-[--text-muted] mb-4">This information explains why you have been referred, what happens during your appointment, and how to prepare. You can read it below or download the PDF version.</p>
-        <a href="/Pdf/SCOTS-Information-Sheet.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-[--navy] text-white font-medium text-sm px-5 py-3 rounded-lg hover:bg-[#5ce1e6] hover:text-[--navy] focus:outline-none focus:ring-2 focus:ring-[--focus] focus:ring-offset-2 transition-colors underline-offset-2 hover:underline">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          Download PDF version<span class="sr-only"> — SCOTS Information Sheet (opens in new tab)</span>
-        </a>
+      <section class="pt-10 pb-6 fade-up text-center">
+        <h1 class="text-[--navy] mb-4">Step Out With Confidence!</h1>
       </section>
 
-      <!-- Why have I been referred? -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="referral-heading">
-        <h2 id="referral-heading" class="text-[--navy] mb-5">Why have I been referred?</h2>
+      <!-- Who we are -->
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="who-heading">
+        <h2 id="who-heading" class="mb-5">Who we are</h2>
         <p class="text-[--text-muted]">
-          You have been referred to SCOTS Orthopaedic Outpatient Services to assess your musculoskeletal condition (e.g. concerns with your joints, muscles, other soft tissues) and determine the best pathway for you.
+          SCOTS as a service is part of the Orthopaedic Outpatient Department Services and is designed to help patients with musculoskeletal conditions (e.g concerns with your joints, muscles, other soft tissues) access the right care, at the right time, in the right place. We provide assessment and guidance for people experiencing these problems, ensuring that treatment pathways are clear, appropriate, and effective.
         </p>
-        <p class="font-medium mb-3">This may include:</p>
+      </section>
+
+      <!-- Why SCOTS exists -->
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="why-heading">
+        <h2 id="why-heading" class="mb-5">Why SCOTS exists</h2>
+        <p class="text-[--text-muted]">
+          Clinical practice guidelines indicate that the gold standard of management for many musculoskeletal/orthopaedic conditions (including Osteoarthritis) is a comprehensive targeted, and time appropriate trial of non surgical strategies. SCOTS ensures you have access to these strategies and can trial them appropriately for your condition.
+        </p>
+      </section>
+
+      <!-- Our role -->
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="role-heading">
+        <h2 id="role-heading" class="mb-5">Our role</h2>
+        <p class="text-[--text-muted]">SCOTS provides assessment to determine the most appropriate pathway for you.</p>
+        <p class="text-[--text-muted]">We work closely with GPs, community providers, and Orthopaedic teams to support this.</p>
+      </section>
+
+      <!-- Our objectives -->
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="objectives-heading">
+        <h2 id="objectives-heading" class="mb-5">Our objectives</h2>
         <ul class="list-disc pl-7 text-[--text-muted] space-y-2">
-          <li>Advice and education</li>
-          <li>A structured rehabilitation plan</li>
-          <li>An education program</li>
-          <li>Referral to further services (if needed)</li>
+          <li>To make sure you receive the right treatment, at the right time, for the best possible outcome.</li>
+          <li>Ensure you have access to a comprehensive trial of rehabilitation and education programs to consider their effectiveness.</li>
+          <li>Support you to step out in confidence by providing strategies you can use to manage your condition by yourself where appropriate.</li>
         </ul>
       </section>
 
       <!-- What will happen at my appointment? -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="appointment-heading">
-        <h2 id="appointment-heading" class="text-[--navy] mb-5">What will happen at my appointment?</h2>
+        <h2 id="appointment-heading" class="mb-5">What will happen at my appointment?</h2>
         <p class="text-[--text-muted] mb-5">We will:</p>
         <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
           <li>Listen to your concerns and goals</li>
@@ -147,29 +160,37 @@ import Layout from '../layouts/Layout.astro';
           <li>Review any previous treatment</li>
           <li>Discuss your diagnosis and options</li>
         </ul>
-        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6">
-          <p class="text-white font-bold mb-0">Together, we will agree on a clear plan forward.</p>
-        </div>
+        <p class="text-[--text-muted]">Together, we will agree on a clear plan forward.</p>
       </section>
 
-      <!-- What if I have already trialed physiotherapy? -->
+      <!-- What if I have already trialed Physiotherapy? -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="physio-heading">
-        <h2 id="physio-heading" class="text-[--navy] mb-5">What if I have already trialed physiotherapy?</h2>
-        <p class="text-[--text-muted]">That is helpful information. We will look at:</p>
+        <h2 id="physio-heading" class="mb-5">What if I have already trialed Physiotherapy?</h2>
+        <p class="text-[--text-muted]">That is helpful information.</p>
+        <p class="text-[--text-muted]">We will look at:</p>
         <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
           <li>What type of treatment you have had</li>
           <li>How long you tried it for</li>
           <li>Whether it was targeted and progressive</li>
           <li>Whether it was specifically tailored to your problem</li>
         </ul>
-        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6">
-          <p class="text-white font-bold mb-0">Sometimes a more structured approach can still lead to improvement.</p>
-        </div>
+        <p class="text-[--text-muted]">Sometimes a more structured approach can still lead to improvement.</p>
+      </section>
+
+      <!-- How can I prepare for the assessment? -->
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="prepare-heading">
+        <h2 id="prepare-heading" class="mb-5">How can I prepare for the assessment?</h2>
+        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
+          <li>Bring any relevant scan reports or letters</li>
+          <li>Wear comfortable clothing for assessment</li>
+          <li>Be ready to discuss how your condition affects your daily life</li>
+        </ul>
+       
       </section>
 
       <!-- What happens after the assessment? -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="outcomes-heading">
-        <h2 id="outcomes-heading" class="text-[--navy] mb-5">What happens after the assessment?</h2>
+        <h2 id="outcomes-heading" class="mb-5">What happens after the assessment?</h2>
         <p class="text-[--text-muted] mb-5">Depending on your assessment, we may:</p>
         <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
           <li>Start or adjust a rehabilitation plan</li>
@@ -181,29 +202,16 @@ import Layout from '../layouts/Layout.astro';
         <p class="text-[--text-muted]">If a trial of treatment is recommended, we will set a clear timeframe and review your progress.</p>
       </section>
 
-      <!-- Our Objectives -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="objectives-heading">
-        <h2 id="objectives-heading" class="text-[--navy] mb-5">Our Objectives</h2>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2">
-          <li>To make sure you receive the right treatment, at the right time, for the best possible outcome.</li>
-          <li>Ensure you have access to a comprehensive trial of rehabilitation and education programs to consider their effectiveness.</li>
-          <li>Support you by providing strategies you can use to manage your condition by yourself where appropriate.</li>
-        </ul>
+      <!-- After I have completed the program what is next? -->
+      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="after-program-heading">
+        <h2 id="after-program-heading" class="mb-5">After I have completed the program what is next?</h2>
+        <p class="text-[--text-muted]">We will provide a review assessment after you have completed your treatment to consider your progress and agree on the best plan moving forward.</p>
+        
+        <p class="text-[--text-muted]">If you have any questions before seeing us, please speak with your GP or the referring clinician.</p>
+        <p class="text-[--text-muted]">We look forward to supporting you. - SCOTS Team. </p>
       </section>
 
-      <!-- How to prepare -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="prepare-heading">
-        <h2 id="prepare-heading" class="text-[--navy] mb-5">How you can prepare for the assessment</h2>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
-          <li>Bring any relevant scan reports or letters</li>
-          <li>Wear comfortable clothing for assessment</li>
-          <li>Be ready to discuss how your condition affects your daily life</li>
-        </ul>
-        <p class="text-[--text-muted]">If you have any questions before seeing us, please speak with your GP or the referring clinician.</p>
-        <div class="bg-gradient-to-r from-[--navy] to-[--navy-light] rounded-xl p-6 mt-5">
-          <p class="text-white font-bold mb-0">We look forward to supporting you. — SCOTS Team.</p>
-        </div>
-      </section>
+     
 
     </div>
 
@@ -211,30 +219,9 @@ import Layout from '../layouts/Layout.astro';
     <div class="bg-[#f5f7f9]">
       <div class="max-w-[900px] md:max-w-none mx-auto px-6 md:px-12 lg:px-20">
 
-      <!-- About Us -->
-      <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="about-heading">
-        <h2 id="about-heading" class="text-[--navy] mb-5">About Us</h2>
-        <p class="text-[--text-muted]">
-          SCOTS is part of the Orthopaedic Outpatient Department Services and is designed to help patients with musculoskeletal conditions access the right care, at the right time, in the right place. We provide assessment and guidance for people experiencing these problems, ensuring that treatment pathways are clear, appropriate, and effective.
-        </p>
-        <h3 class="text-[--navy] mt-6 mb-3">Our Role</h3>
-        <p class="text-[--text-muted]">
-          SCOTS provides assessment to determine the most appropriate pathway for you. We work closely with GPs, community providers, and Orthopaedic teams to determine whether a patient is best managed with:
-        </p>
-        <ul class="list-disc pl-7 text-[--text-muted] space-y-2 mb-5">
-          <li>Targeted non-surgical treatment</li>
-          <li>Further investigation</li>
-          <li>Or referral for orthopaedic (surgical) opinion</li>
-        </ul>
-        <h3 class="text-[--navy] mt-6 mb-3">Why SCOTS Exists</h3>
-        <p class="text-[--text-muted]">
-          Clinical practice guidelines indicate that the gold standard of management for many musculoskeletal/orthopaedic conditions (including Osteoarthritis) is a comprehensive targeted, and time appropriate trial of non-surgical strategies. SCOTS ensures you have access to these strategies and can trial them appropriately for your condition.
-        </p>
-      </section>
-
       <!-- Locations -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="locations-heading">
-        <h2 id="locations-heading" class="text-[--navy] mb-6">Our Service Locations</h2>
+        <h2 id="locations-heading" class="mb-6">Our Service Locations</h2>
         <div class="space-y-5">
           <div class="bg-white border border-[--border] rounded-xl p-6">
             <p class="font-bold text-[--navy] mb-2">Assessment Clinics</p>
@@ -275,12 +262,16 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Contact & Resources -->
       <section class="py-12 scroll-mt-40 fade-up" aria-labelledby="contact-heading">
-        <h2 id="contact-heading" class="text-[--navy] mb-5">Contact Us</h2>
+        <h2 id="contact-heading" class="mb-5">Contact Us</h2>
         <p class="text-[--text-muted] mb-8">Contact details will be made available after your appointment with us.</p>
 
-        <h2 class="text-[--navy] mb-4">Helpful Resources and Links</h2>
-        <p class="text-[--text-muted]">
-          Arthritis New Zealand: <a href="https://www.arthritis.org.nz/" target="_blank" rel="noopener noreferrer">www.arthritis.org.nz<span class="sr-only"> (opens in new tab)</span></a>
+        <h2 class="mb-4">Helpful Links</h2>
+        <ol class="list-decimal pl-7 text-[--text-muted] space-y-2">
+          <li>Arthritis New Zealand: <a href="https://www.arthritis.org.nz/" target="_blank" rel="noopener noreferrer" class="text-[--teal] hover:underline">https://www.arthritis.org.nz/<span class="sr-only"> (opens in new tab)</span></a></li>
+          <li>Otago University Pharmacy Clinic: <a href="https://www.otago.ac.nz/pharmacy-clinic" target="_blank" rel="noopener noreferrer" class="text-[--teal] hover:underline">https://www.otago.ac.nz/pharmacy-clinic<span class="sr-only"> (opens in new tab)</span></a></li>
+        </ol>
+        <p class="mt-8 text-[--text-muted]">
+          You can also view the <a href="/Pdf/SCOTS-Information-Sheet.pdf" target="_blank" rel="noopener noreferrer" class="text-[--teal] underline hover:text-[--navy] transition-colors">PDF version of this information<span class="sr-only"> (opens in new tab)</span></a>.
         </p>
       </section>
       </div>
